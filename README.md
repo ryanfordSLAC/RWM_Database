@@ -6,10 +6,25 @@ Version 1.0 of the RWM Database
 * SSO Authentication
 * Collect/store scanned images of paper forms in the database
 
-## Platform
-* Visual Studio
+### Platform
+* Visual Studio 2019
 * ASP.Net Core
-* MySQL (on Server)
+* MySQL
+* For Visual Studio, add the following plugin to connect to SLAC MySQL server: https://dev.mysql.com/downloads/windows/visualstudio/
+
+### MySQL Connection Properties:
+* Database Name: rp_rwm
+* Database User: rp_rwm_u (all privileges)
+* Password:  See Administrator
+* MySQL Server: mysql-dev02
+* Port: 3307
+* Database Version: MySQL 5.5.54
+* Connections allowed from: 134.79.68.169 (Administrator)
+* Connections also allowed from:  TBD (Suli Student)
+
+### MySQL Workbench (If Needed):
+* Download version 6.3.8 for compatibility with MySQL 5.5.54: https://downloads.mysql.com/archives/workbench/
+* 6.3.8:  Windows (x86, 32-bit), MSI Installer
 
 ## Main Tables
 
