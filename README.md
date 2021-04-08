@@ -11,6 +11,7 @@ Version 1.0 of the RWM Database
 * ASP.Net Core
 * MySQL
 * For Visual Studio, add the following plugin to connect to SLAC MySQL server: https://dev.mysql.com/downloads/windows/visualstudio/
+* And, the connector:  https://dev.mysql.com/downloads/connector/net/
 
 ### MySQL Connection Properties:
 * Database Name: rp_rwm
