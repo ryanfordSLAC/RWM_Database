@@ -8,7 +8,7 @@ Version 1.0 of the RWM Database
 
 ### Platform
 * Visual Studio 2019
-* ASP.Net Core
+* ASP.Net Core, C#
 * MySQL
 * For Visual Studio, add the following plugin to connect to SLAC MySQL server: https://dev.mysql.com/downloads/windows/visualstudio/
 * And, the connector:  https://dev.mysql.com/downloads/connector/net/
