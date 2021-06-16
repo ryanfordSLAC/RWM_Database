@@ -66,7 +66,7 @@ Version 1.0 of the RWM Database
 * List_ShipmentType
 
 ## Reports
-* Amount shipped by quarter (cubic feet, weight)
+* Amount shipped by quarter, year (cubic feet, weight)
 * Amount shipped to each disposal site (cubic feet, weight)
 * Incomplete Items
 * Progress of ongoing shipment
