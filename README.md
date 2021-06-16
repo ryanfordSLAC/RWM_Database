@@ -71,3 +71,4 @@ Version 1.0 of the RWM Database
 * Incomplete Items
 * Progress of ongoing shipment
 * Dashboard (# items, # containers (full/empty), etc.)
+* Report showing declared items with respect to 18 month limit.
