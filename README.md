@@ -4,7 +4,7 @@ Version 1.0 of the RWM Database
 ## Specifications
 * Web Forms / Database App
 * SSO Authentication
-* Collect/store scanned images of paper forms in the database
+* Collect/store scanned images of paper forms in the database (desired show preview of PDF full size instead of download)
 
 ### Platform
 * Visual Studio 2019
