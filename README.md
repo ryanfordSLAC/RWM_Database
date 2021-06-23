@@ -51,7 +51,7 @@ Version 1.0 of the RWM Database
 * Have their own properties
 * Includes role
 * Future expansion to security privlege
-* Future expansion to reference people table using SLAC ID.
+* Future expansion to reference phonebook table using SLAC ID (connection to Oracle DB).
 
 ### Attachments
 * Upload scanned PDF images or photos
