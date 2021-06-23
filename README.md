@@ -72,3 +72,17 @@ Version 1.0 of the RWM Database
 * Progress of ongoing shipment
 * Dashboard (# items, # containers (full/empty), etc.)
 * Report showing declared items with respect to 18 month limit.
+
+## Workflow
+
+The web-forms application has the following workflow:
+
+* Radioactive waste items are declared in the items view.  In this view, a container may be assigned to each item consistent with the layout of the Declaration Form
+* Containers are setup in the containers view.  The view shows a list of items packed in each container.  Containers may be assigned to a shipment.
+* Shipments are setup in the shipments view.  The view shows a list of containers which are part of the shipment.  Shipments may be assigned to a burial.
+* Burials are setup in the burials view.  The view shows a list of shipments which are part of the burial.  Certificates of disposal may be assigned to a burial.
+* A number of views are also provided to setup lists used to pre-populate drop-down boxes, to improve filtering and sorting.
+* A number of reports are provided to measure the quantities of waste disposed by time interval
+* An attachments view is provided to upload documentation associated which each step.
+
+
