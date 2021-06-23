@@ -47,9 +47,11 @@ Version 1.0 of the RWM Database
 * Have their own properties
 
 ### People
+* Includes SLAC ID from phonebook
 * Have their own properties
 * Includes role
 * Future expansion to security privlege
+* Future expansion to reference people table using SLAC ID.
 
 ### Attachments
 * Upload scanned PDF images or photos
