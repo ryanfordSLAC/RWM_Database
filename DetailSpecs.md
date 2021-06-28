@@ -8,25 +8,25 @@
 * Generation Location, VARCHAR
 * Account Number (#####-#####)
 * Section B:
-* * None
+  * None
 * Section C:
-* * None
+  * None
 * Section D:
   * Checkbox Hazardous/Non-Haz
 * Section E:
-* * Generator Name (PeopleID)
-* * Generation Date
+  * Generator Name (PeopleID)
+  * Generation Date
 * Section F:
-* * None
+  * None
 * Section G:
-* * Received By (PeopleID)
-* * Received Date
+  * Received By (PeopleID)
+  * Received Date
 * On the Fly:
-* * Item Volume (L * W * H), unts = ft3, m3)
+  * Item Volume (L * W * H), unts = ft3, m3)
 * Meta Data:
-* * Created Date
-* * Modified Date
-* * UserID (WindowsID)
+  * Created Date
+  * Modified Date
+  * UserID (WindowsID)
 
 ## Container Table
 * Container Number
