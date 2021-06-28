@@ -12,7 +12,7 @@
 * Section C:
 * * None
 * Section D:
-* * Checkbox Hazardous/Non-Haz
+  * Checkbox Hazardous/Non-Haz
 * Section E:
 * * Generator Name (PeopleID)
 * * Generation Date
