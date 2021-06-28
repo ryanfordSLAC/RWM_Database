@@ -23,6 +23,10 @@
 * * Received Date
 * On the Fly:
 * * Item Volume (L * W * H), unts = ft3, m3)
+* Meta Data:
+* * Created Date
+* * Modified Date
+* * UserID (WindowsID)
 
 ## Container Table
 * Container Number
