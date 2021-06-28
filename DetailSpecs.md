@@ -8,7 +8,7 @@
 * Generation Location, VARCHAR
 * Account Number (#####-#####)
 * Section B:
-** None
+* * None
 * Section C:
 * * None
 * Section D:
@@ -21,6 +21,8 @@
 * Section G:
 * * Received By (PeopleID)
 * * Received Date
+* On the Fly:
+* * Item Volume (L * W * H), unts = ft3, m3)
 
 ## Container Table
 * Container Number
