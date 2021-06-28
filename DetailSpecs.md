@@ -10,7 +10,7 @@
 * Section B:
 ** None
 * Section C:
-** None
+* * None
 * Section D:
 ** Checkbox Hazardous/Non-Haz
 * Section E:
