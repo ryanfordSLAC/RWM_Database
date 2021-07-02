@@ -4,8 +4,6 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace RWM_Database
 {
@@ -14,6 +12,7 @@ namespace RWM_Database
         public static void Main(string[] args)
         {
             CreateHostBuilder(args).Build().Run();
+
         }
 
         public static IHostBuilder CreateHostBuilder(string[] args) =>
@@ -22,5 +21,6 @@ namespace RWM_Database
                 {
                     webBuilder.UseStartup<Startup>();
                 });
-    }
+        }
+
 }
