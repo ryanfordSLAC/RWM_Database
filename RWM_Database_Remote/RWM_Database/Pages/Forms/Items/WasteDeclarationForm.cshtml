@@ -1,0 +1,63 @@
+﻿@page
+@model RWM_Database.Pages.Forms.WasteDeclarationFormModel
+@{
+    ViewData["Title"] = "WasteDeclarationForm";
+}
+
+
+<link rel="stylesheet" href="~/css/form.css">
+<form class="form" method="post" id="styled_form">
+
+    <label for="SearchDeclaration">Search Declaration Number:</label>
+    <input type="text" id="SearchDeclaration" name="SearchDeclaration">
+
+    <label for="SearchContainer">Search Container Number:</label>
+    <input type="text" id="SearchContainer" name="SearchContainer">
+
+    <input type="submit" value="Search" asp-page-handler="SearchButton" />
+    
+    <input type="submit" value="Clear" asp-page-handler="ClearButton" />
+</form>
+
+<br />
+
+<b>Waste Declaration Forms Found: @Model.WasteForms.Count</b>
+
+<link rel="stylesheet" href="~/css/table.css">
+<table id="styled_table">
+    <tr>
+        <th>Declaration Number</th>
+        <th>Container Number</th>
+        <th>Location</th>
+        <th>Description</th>
+        <th>Generation Process</th>
+
+    </tr>
+
+    @foreach (var element in @Model.WasteForms)
+    {
+
+        var declarationNumber = element.DeclarationNumber;
+        var containerNumber = element.ContainerNumber;
+        var location = element.Location;
+        var description = element.ItemDescription;
+        var generationProcess = element.GenerationProcess;
+        <tr>
+            <td><a href="/Forms/Items/PreviewWasteDeclarationForm?DeclarationNumber=@declarationNumber">@Html.DisplayFor(m => declarationNumber)</a></td>
+            <td><a href="/Forms/Container/ViewContainer?ContainerNumber=@containerNumber">@Html.DisplayFor(m => containerNumber)</a></td>
+            <td>@Html.DisplayFor(m => location)</td>
+            <td>@Html.DisplayFor(m => description)</td>
+            <td>@Html.DisplayFor(m => generationProcess)</td>
+        </tr>
+    }
+
+</table>
+
+<br />
+
+<link rel="stylesheet" href="~/css/form.css">
+<form class="form" method="post" id="styled_create_record">
+    <input type="submit" value="Create Waste Form" asp-page-handler="CreateButton" />
+</form>
+
+

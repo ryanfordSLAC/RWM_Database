@@ -24,6 +24,13 @@ namespace RWM_Database.Pages.Forms
 
         public String PreviewForm { get; set; }
 
+        [BindProperty(Name = "SearchDeclaration", SupportsGet = true)]
+        public String SearchDeclaration { get; set; }
+
+
+        [BindProperty(Name = "SearchContainer", SupportsGet = true)]
+        public String SearchContainer { get; set; }
+
         public class WasteDeclarationData
         {
 
@@ -51,13 +58,16 @@ namespace RWM_Database.Pages.Forms
         }
 
         /*
-        When the Submit Button is pressed: create an entry in the database for the desired
-        * Waste Declaration Form with the input data
+        
         */
 
-        public IActionResult OnPostSubmitButton(IFormCollection data)
+        public IActionResult OnPostSearchButton(IFormCollection data)
         {
-            this.CreateWasteDeclarationItem(data);
+            return RedirectToPage("WasteDeclarationForm", new { SearchDeclaration = data["SearchDeclaration"], SearchContainer = data["SearchContainer"]});
+        }
+
+        public IActionResult OnPostClearButton(IFormCollection data)
+        {
             return RedirectToPage("WasteDeclarationForm");
         }
 
@@ -70,30 +80,37 @@ namespace RWM_Database.Pages.Forms
             return RedirectToPage("PreviewWasteDeclarationForm", new { DeclarationNumber = data["DeclarationNumber"] });
         }
 
-        /*
-        Creates the waste declaration form entry in the MySQL Database
-        */
-
-        private void CreateWasteDeclarationItem(IFormCollection data)
+        public IActionResult OnPostCreateButton(IFormCollection data)
         {
-            try
-            {
-
-                MySqlCommand command = MySQLHandler.GetMySQLConnection().CreateCommand();
-                command.CommandText = ("INSERT INTO items VALUES(0, @DeclarationNumber, @ContainerNumber, @Location, @ItemDescription, @GenerationProcess)");
-                command.Parameters.AddWithValue("@DeclarationNumber", data["DeclarationNumber"]);
-                command.Parameters.AddWithValue("@ContainerNumber", data["ContainerNumber"]);
-                command.Parameters.AddWithValue("@Location", data["Location"]);
-                command.Parameters.AddWithValue("@ItemDescription", data["ItemDescription"]);
-                command.Parameters.AddWithValue("@GenerationProcess", data["GenerationProcess"]);
-                command.ExecuteReader();
-            }
-            catch (MySqlException ex)
-            {
-                Console.WriteLine(ex.Message.ToString());
-            }
+            return RedirectToPage("CreateWasteForm");
         }
 
+
+
+        private string GetSearchCommand(MySqlCommand command)
+        {
+            string sql = "SELECT * FROM items";
+
+            if (SearchDeclaration != null && SearchContainer != null)
+            {
+                sql += " WHERE declaration_number =@SearchDeclaration AND container_number =@SearchContainer";
+                command.Parameters.AddWithValue("@SearchDeclaration", SearchDeclaration);
+                command.Parameters.AddWithValue("@SearchContainer", SearchContainer);
+            }
+
+            else if (SearchDeclaration != null)
+            {
+                sql += " WHERE declaration_number =@SearchDeclaration";
+                command.Parameters.AddWithValue("@SearchDeclaration", SearchDeclaration);
+            }
+            else if (SearchContainer != null)
+            {
+                sql += " WHERE container_number =@SearchContainer";
+                command.Parameters.AddWithValue("@SearchContainer", SearchContainer);
+            }
+
+            return sql;
+        }
 
         /*
         * Load all Waste Declaration Forms in the database and return them as a List for the website to preview
@@ -107,7 +124,7 @@ namespace RWM_Database.Pages.Forms
             {
                 MySqlConnection connection = MySQLHandler.GetMySQLConnection();
                 MySqlCommand command = connection.CreateCommand();
-                command.CommandText = "SELECT * FROM items";
+                command.CommandText = GetSearchCommand(command);
 
                 MySqlDataReader read = command.ExecuteReader();
 

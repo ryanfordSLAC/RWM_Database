@@ -49,7 +49,8 @@ namespace RWM_Database.Pages.Forms
             {
                 MySqlConnection connection = MySQLHandler.GetMySQLConnection();
                 MySqlCommand command = connection.CreateCommand();
-                command.CommandText = "SELECT * FROM container WHERE container_number = '" + containerNumber + "'";
+                command.CommandText = "SELECT * FROM container WHERE container_number = @ContainerNumber";
+                command.Parameters.AddWithValue("@ContainerNumber", containerNumber);
 
                 MySqlDataReader read = command.ExecuteReader();
 
