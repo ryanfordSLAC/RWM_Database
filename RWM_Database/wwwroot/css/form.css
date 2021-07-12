@@ -1,0 +1,77 @@
+﻿#styled_form input[type=text], #styled_form select {
+    width: 100%;
+    padding: 2px 5px;
+    margin: 8px 0;
+    display: inline-block;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+    font-family: Georgia;
+}
+
+#styled_form input[type=label], #styled_form select {
+    width: 100%;
+    padding: 2px 5px;
+    margin: 8px 0;
+    display: inline-block;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+    font-family: Georgia;
+}
+
+
+#styled_form input[type=submit] {
+    box-shadow: inset 0px 0px 0px 0px #54a3f7;
+    background: linear-gradient(to bottom, #007dc1 5%, #0061a7 100%);
+    background-color: #007dc1;
+    border-radius: 6px;
+    border: 2px solid #124d77;
+    display: inline-block;
+    cursor: pointer;
+    color: #ffffff;
+    font-family: Georgia;
+    font-size: 14px;
+    padding: 2px 14px;
+    text-decoration: none;
+    text-shadow: 0px 1px 0px #154682;
+}
+
+#styled_form input[type=submit]:hover {
+    background: linear-gradient(to bottom, #0061a7 5%, #007dc1 100%);
+    background-color: #0061a7;
+}
+
+#styled_form {
+    border-radius: 5px;
+    background-color: #f2f2f2;
+    padding: 10px;
+    font-family: Georgia;
+}
+
+#styled_create_record {
+    border-radius: 5px;
+    background-color: #f2f2f2;
+    padding: 10px;
+    font-family: Georgia;
+}
+
+#styled_create_record input[type=submit] {
+    box-shadow: inset 0px 0px 0px 0px #54a3f7;
+    background: linear-gradient(to bottom, #007dc1 5%, #0061a7 100%);
+    background-color: #007dc1;
+    border-radius: 6px;
+    border: 2px solid #124d77;
+    display: inline-block;
+    cursor: pointer;
+    color: #ffffff;
+    font-family: Georgia;
+    font-size: 14px;
+    padding: 2px 14px;
+    text-decoration: none;
+    text-shadow: 0px 1px 0px #154682;
+}
+
+
+
+

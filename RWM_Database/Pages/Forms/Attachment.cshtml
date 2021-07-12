@@ -1,0 +1,33 @@
+﻿@page
+@model RWM_Database.Pages.Forms.AttachmentModel
+@{
+    ViewData["Title"] = "Attachment";
+}
+
+<b>Uploaded Attachments: @Model.Attachments.Count</b>
+
+@foreach (var element in @Model.Attachments)
+{
+    var attachmentName = element.GetAttachmentName();
+    var attachmentDate = element.GetAttachmentDate();
+    var attachmentCreator = element.GetAttachmentCreator();
+
+<form class="form" method="post">
+    @Html.DisplayFor(m => attachmentName)
+    @Html.DisplayFor(m => attachmentCreator)
+    @Html.DisplayFor(m => attachmentDate)
+    <input type="hidden" name="fileName" value="@Html.DisplayFor(m => attachmentName)" id="fileName" />
+    <input type="submit" value="Preview" asp-page-handler="Button1" />
+</form>
+}
+
+<br />
+<br />
+
+
+
+<form method="post" enctype="multipart/form-data">
+    <input type="file" asp-for="File" />
+    <input type="submit" />
+</form>
+

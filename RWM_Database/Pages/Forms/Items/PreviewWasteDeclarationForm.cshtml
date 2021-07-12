@@ -1,0 +1,29 @@
+﻿@page
+@model RWM_Database.Pages.Forms.PreviewWasteDeclarationFormModel
+@{
+    ViewData["Title"] = "PreviewWasteDeclarationForm";
+}
+
+<h1>PreviewWasteDeclarationForm</h1>
+
+@{
+    var WasteForm = Model.Form;
+
+    var data = Model.Form;
+    var declarationNumber = WasteForm.DeclarationNumber;
+    var containerNumber = WasteForm.ContainerNumber;
+    var location = WasteForm.Location;
+    var description = WasteForm.ItemDescription;
+    var generationProcess = WasteForm.GenerationProcess;
+
+    <b>Declaration Number: </b>@Html.DisplayFor(m => declarationNumber)
+    <br />
+    <b>Container Number: </b>@Html.DisplayFor(m => containerNumber)
+    <br />
+    <b>Location: </b>@Html.DisplayFor(m => location)
+    <br />
+    <b>Description: </b>@Html.DisplayFor(m => location)
+    <br />
+    <b>Generation Process: </b>@Html.DisplayFor(m => generationProcess)
+    <br />
+}

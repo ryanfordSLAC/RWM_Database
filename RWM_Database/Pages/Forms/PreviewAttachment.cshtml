@@ -1,0 +1,14 @@
+﻿@page
+@model RWM_Database.Pages.Forms.PreviewAttachmentModel
+@{
+    ViewData["Title"] = "PreviewAttachment";
+}
+
+<h1>PreviewAttachment</h1>
+
+@{
+    var base64 = Convert.ToBase64String(Model.ImagePreview);
+    var imgSrc = String.Format("data:image/gif;base64,{0}", base64);
+}
+
+<img src="@imgSrc" />
