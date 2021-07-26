@@ -41,3 +41,9 @@
 * Description
 * Inner Volume
 * Outer Volume
+
+## Burials Table
+* ID (Primary Key)
+* burial_number (varchar)
+* certificate
+*
