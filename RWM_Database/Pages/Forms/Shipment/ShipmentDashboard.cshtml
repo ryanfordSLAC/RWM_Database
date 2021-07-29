@@ -1,0 +1,79 @@
+﻿@page
+@model RWM_Database.Pages.Forms.Shipment.ShipmentDashboardModel
+@{
+    ViewData["Title"] = "ShipmentDashboard";
+}
+
+<link rel="stylesheet" href="~/css/create_form.css">
+<form class="form" method="post" id="create_form">
+
+    <header>Search By Field</header>
+    <div class="information-container" id="styled_form">
+
+        <label for="SearchShipmentNumber">Shipment Number:</label>
+        <input type="text" id="SearchShipmentNumber" name="SearchShipmentNumber"/>
+
+
+        <label for="SearchShipmentType">Shipment Type:</label>
+
+        <input type="text" id="SearchShipmentType" name="SearchShipmentType" />
+    </div>
+
+    <input type="submit" value="Search" asp-page-handler="SearchButton" />
+
+    <input type="submit" value="Clear" asp-page-handler="ClearButton" />
+</form>
+
+
+
+<b>Shipments Found: @Model.ShipmentHandler.ShipmentList.Count</b>
+
+<link rel="stylesheet" href="~/css/table.css">
+<table id="styled_table">
+    <tr>
+        <th>Shipment Number</th>
+        <th>Shipment Type</th>
+        <th>Conveyance</th>
+    </tr>
+    @{
+        var search = Model.ShipmentHandler.Search;
+        var paginatedTable = Model.PaginatedTable;
+
+        int start = (Model.CurrentPage - 1) * paginatedTable.PageSize;
+        if (start < 0)
+        {
+            start = 0;
+        }
+        for (int i = start; i < start + paginatedTable.PageSize; i++)
+        {
+            if (i >= Model.ShipmentHandler.ShipmentList.Count)
+            {
+                break;
+            }
+            var element = Model.ShipmentHandler.ShipmentList[i];
+            <tr>
+                <td><a href="/Forms/Shipment/PreviewShipment?ShipmentNumber=@element.ShipmentNumber">@element.ShipmentNumber</a></td>
+                <td>@element.ShipmentType</td>
+                <td>@element.ShipmentConveyance</td>
+            </tr>
+        }
+    }
+
+</table>
+
+<div>
+    <ul class="pagination">
+        @for (var i = 1; i <= paginatedTable.TotalPages; i++)
+        {
+            <li class="page-item @(i == Model.CurrentPage ? "active" : "")">
+                <a href="/Forms/Shipment/ShipmentDashboard?CurrentPage=@i@search.GetURLSearch()" class="page-link">@i</a>
+            </li>
+        }
+    </ul>
+</div>
+
+
+<link rel="stylesheet" href="~/css/create_form.css">
+<form class="form" method="post" id="create_form">
+    <input type="submit" value="Create Shipment" asp-page-handler="CreateButton" />
+</form>

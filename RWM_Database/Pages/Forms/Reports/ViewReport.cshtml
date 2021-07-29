@@ -1,0 +1,19 @@
+﻿@page
+@model RWM_Database.Pages.Forms.Reports.ViewReportModel
+@{
+}
+
+<link rel="stylesheet" href="~/css/view_item.css">
+<div id="styled_item">
+    @{
+
+
+        <header>Report </header>
+   
+        <div class="information-container" id="styled_item">
+            <label>Items Declared From @Model.StartDate to @Model.EndDate:</label>
+            <p>@Model.ItemReport.CountBetween("items", @Model.StartDate, @Model.EndDate)</p>
+
+        </div>
+    }
+</div>

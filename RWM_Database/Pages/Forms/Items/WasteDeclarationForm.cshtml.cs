@@ -6,6 +6,9 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using MySql.Data.MySqlClient;
+using RWM_Database.Backend;
+using RWM_Database.Utility;
+using static RWM_Database.Utility.SearchByField;
 
 namespace RWM_Database.Pages.Forms
 {
@@ -19,51 +22,43 @@ namespace RWM_Database.Pages.Forms
     public class WasteDeclarationFormModel : PageModel
     {
 
+        public ItemHandler ItemHandler { get; set; }
 
-        public List<WasteDeclarationData> WasteForms { get; set; }
-
-        public String PreviewForm { get; set; }
+        public PaginatedTable PaginatedTable { get; set; }
 
         [BindProperty(Name = "SearchDeclaration", SupportsGet = true)]
-        public String SearchDeclaration { get; set; }
-
+        public string SearchDeclaration { get; set; }
 
         [BindProperty(Name = "SearchContainer", SupportsGet = true)]
-        public String SearchContainer { get; set; }
+        public string SearchContainer { get; set; }
 
-        public class WasteDeclarationData
-        {
 
-            public String DeclarationNumber { get; set; }
-            public String ContainerNumber { get; set; }
-            public String Location { get; set; }
-            public String ItemDescription { get; set; }
-            public String GenerationProcess { get; set; }
+        [BindProperty(Name = "CurrentPage", SupportsGet = true)]
+        public int CurrentPage { get; set; }
 
-            public WasteDeclarationData(String declaration_number, String container_number, String location, String item_description, String generation_process)
-            {
-                this.DeclarationNumber = declaration_number;
-                this.ContainerNumber = container_number;
-                this.Location = location;
-                this.ItemDescription = item_description;
-                this.GenerationProcess = generation_process;
-            }
-
-        }
 
         public void OnGet()
         {
-            
-            WasteForms = this.GetWasteFormsList();
+
+
+            ItemHandler = new ItemHandler();
+            SearchByField search = ItemHandler.Search;
+
+            search.AddSearch("declaration_number", SearchDeclaration);
+            search.AddSearch("container_number", SearchContainer);
+
+            ItemHandler.LoadItemList();
+
+            PaginatedTable = new PaginatedTable(2, ItemHandler.ItemList.Count);
+
         }
 
         /*
         
         */
 
-        public IActionResult OnPostSearchButton(IFormCollection data)
-        {
-            return RedirectToPage("WasteDeclarationForm", new { SearchDeclaration = data["SearchDeclaration"], SearchContainer = data["SearchContainer"]});
+        public IActionResult OnPostSearchButton(IFormCollection data) {
+            return RedirectToPage("WasteDeclarationForm", new { SearchDeclaration = data["SearchDeclaration"], SearchContainer = data["SearchContainer"] });
         }
 
         public IActionResult OnPostClearButton(IFormCollection data)
@@ -82,75 +77,9 @@ namespace RWM_Database.Pages.Forms
 
         public IActionResult OnPostCreateButton(IFormCollection data)
         {
+            
             return RedirectToPage("CreateWasteForm");
         }
 
-
-
-        private string GetSearchCommand(MySqlCommand command)
-        {
-            string sql = "SELECT * FROM items";
-
-            if (SearchDeclaration != null && SearchContainer != null)
-            {
-                sql += " WHERE declaration_number =@SearchDeclaration AND container_number =@SearchContainer";
-                command.Parameters.AddWithValue("@SearchDeclaration", SearchDeclaration);
-                command.Parameters.AddWithValue("@SearchContainer", SearchContainer);
-            }
-
-            else if (SearchDeclaration != null)
-            {
-                sql += " WHERE declaration_number =@SearchDeclaration";
-                command.Parameters.AddWithValue("@SearchDeclaration", SearchDeclaration);
-            }
-            else if (SearchContainer != null)
-            {
-                sql += " WHERE container_number =@SearchContainer";
-                command.Parameters.AddWithValue("@SearchContainer", SearchContainer);
-            }
-
-            return sql;
-        }
-
-        /*
-        * Load all Waste Declaration Forms in the database and return them as a List for the website to preview
-        */
-
-        private List<WasteDeclarationData> GetWasteFormsList()
-        {
-            
-            List<WasteDeclarationData> attachmentList = new List<WasteDeclarationData>();
-            try
-            {
-                MySqlConnection connection = MySQLHandler.GetMySQLConnection();
-                MySqlCommand command = connection.CreateCommand();
-                command.CommandText = GetSearchCommand(command);
-
-                MySqlDataReader read = command.ExecuteReader();
-
-                if (read.HasRows)
-                {
-                    while (read.Read())
-                    {
-                        string declarationNumber = read.GetString(1);
-                        string containerNumber = read.GetString(2);
-                        string location = read.GetString(3);
-                        string itemDescription = read.GetString(4);
-                        string generationProcess = read.GetString(5);
-
-                        WasteDeclarationData data = new WasteDeclarationData(declarationNumber, containerNumber, location, itemDescription, generationProcess);
-
-                        attachmentList.Add(data);
-                    }
-                }
-                connection.Close();
-            }
-            catch (MySqlException ex)
-            {
-                Console.WriteLine(ex.Message.ToString());
-            }
-            return attachmentList;
-        }
     }
-
 }

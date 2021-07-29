@@ -33,17 +33,26 @@
 <br />
 <br />
 
-<link rel="stylesheet" href="~/css/form.css">
-<form class="form" method="post" id="styled_form">
+<link rel="stylesheet" href="~/css/create_form.css">
+<form class="form" method="post" id="create_form">
 
-    <label for="ContainerNumber">Container Number:</label>
-    <input type="text" id="ContainerNumber" name="ContainerNumber">
+    <header>Container Information</header>
+    <div class="information-container" id="styled_form">
+        <label for="ContainerNumber">Container Number:</label>
+        <input type="text" id="ContainerNumber" name="ContainerNumber">
 
-    <label for="SealNumber">Seal Number:</label>
-    <input type="text" id="SealNumber" name="SealNumber">
+        <label for="SealNumber">Seal Number:</label>
+        <input type="text" id="SealNumber" name="SealNumber">
 
-    <label for="Type">Type:</label>
-    <input type="text" id="Type" name="Type">
+        <label for="Type">Type:</label>
+        <input type="text" id="Type" name="Type">
 
-    <input type="submit" value="Submit" asp-page-handler="SubmitButton" />
+        <label for="MaxVolume">Max Volume:</label>
+        <input type="text" id="MaxVolume" name="MaxVolume">
+
+    </div>
+
+  
+
+    <input type="submit" value="Create Container" asp-page-handler="SubmitButton" />
 </form>

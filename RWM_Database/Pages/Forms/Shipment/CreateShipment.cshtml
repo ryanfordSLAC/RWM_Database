@@ -1,0 +1,38 @@
+﻿@page
+@model RWM_Database.Pages.Forms.Shipment.CreateShipmentModel
+@{
+}
+
+<link rel="stylesheet" href="~/css/create_form.css">
+
+<b id="create_form">Shipment Declaration Form</b>
+
+
+
+<form class="form" method="post" id="create_form">
+
+    <header>Shipment Information</header>
+    <div class="information-container" id="styled_form">
+        <label for="ShipmentNumber">Shipment Number:</label>
+        <input type="text" id="ShipmentNumber" name="ShipmentNumber">
+
+        <label for="ShipmentType">Shipment Type:</label>
+        <input type="text" id="ShipmentType" name="ShipmentType">
+        
+        <label for="ShipmentConveyance">Conveyance:</label>
+        <input type="text" id="ShipmentConveyance" name="ShipmentConveyance">
+
+
+
+    </div>
+
+    <header>Specifications</header>
+    <div class="information-container" id="styled_form">
+
+    </div>
+
+
+
+
+    <input type="submit" value="Submit Shipment" asp-page-handler="SubmitButton" />
+</form>

@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -6,21 +6,19 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using MySql.Data.MySqlClient;
 
-namespace RWM_Database.Pages.Forms
+namespace RWM_Database.Pages.Forms.Attachment
 {
-
 
     /* 
     * Loads an image preview of an attachment
     * specified from the directing webpage
     * Author: James Meadows
     */
-
-    public class PreviewAttachmentModel : PageModel
+    public class ViewAttachmentModel : PageModel
     {
 
         [BindProperty(Name = "FileName", SupportsGet = true)]
-        public String FileName { get; set; }
+        public string FileName { get; set; }
 
         public byte[] ImagePreview { get; set; }
 
@@ -29,7 +27,7 @@ namespace RWM_Database.Pages.Forms
             LoadAttachment(FileName);
         }
 
-        private void LoadAttachment(String name)
+        private void LoadAttachment(string name)
         {
             try
             {

@@ -1,0 +1,64 @@
+﻿
+#styled_item header {
+    margin-bottom: 5px;
+    margin-top: 30px;
+    padding-top: 5px;
+    padding-left: 3px;
+    font-size: 18px;
+    font-weight: bold;
+    font-family: Helvetica;
+    color: #D13000;
+}
+
+#styled_item label {
+    font-weight: bold;
+    font-size: 15px;
+}
+
+#styled_item p {
+    font-size: 15px;
+    display: inline;
+    padding-left: 2px;
+    text-align: left;
+}
+
+#styled_item p:after {
+    content: "\a";
+    white-space: pre;
+}
+
+#styled_item .information-container {
+    border: 2px solid #CBCBCB;
+    background-color: #FAFAFA;
+    margin: auto;
+    padding: 15px;
+    text-align: left;
+    display: grid;
+    grid-template-columns: 0.5fr 1.5fr;
+    grid-template-rows: 1fr 0.9fr;
+    grid-template-areas: ". ." ". .";
+}
+
+#styled_item .information-container-units {
+    border: 1px solid #CB4603;
+    background-color: #FAFAFA;
+    margin: auto;
+    padding: 15px;
+    text-align: left;
+    display: grid;
+    grid-template-columns: .3fr .1fr .3fr;
+    row-gap: 10px;
+    grid-template-rows: 1fr 1fr 1fr;
+    grid-template-areas: ". . ." ". . ." ". . .";
+}
+
+#styled_item .table-container {
+  
+    margin: auto;
+    margin-bottom: 3px;
+    text-align: left;
+}
+
+#styled_item {
+    font-family: Arial;
+}

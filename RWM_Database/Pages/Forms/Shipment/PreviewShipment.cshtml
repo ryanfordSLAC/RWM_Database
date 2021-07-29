@@ -1,0 +1,88 @@
+﻿@page
+@model RWM_Database.Pages.Forms.Shipment.PreviewShipmentModel
+@{
+    ViewData["Title"] = "PreviewShipment";
+}
+
+<link rel="stylesheet" href="~/css/view_item.css">
+<div id="styled_item">
+    @{
+        var shipmentData = Model.Shipment;
+
+
+        <header>Shipment Information </header>
+
+        <div class="information-container" id="styled_item">
+            <label>Shipment Number:</label>
+            <p>@shipmentData.ShipmentNumber</p>
+
+            <label>Shipment Type:</label>
+            <p>@shipmentData.ShipmentType</p>
+
+            <label>Conveyance:</label>
+            <p>@shipmentData.ShipmentConveyance</p>
+
+        </div>
+
+        <header>Containers Included</header>
+
+        <div class="table-container" id="styled_item">
+            <link rel="stylesheet" href="~/css/table.css">
+            <table id="styled_table">
+                <tr>
+                    <th>Container Number</th>
+                    <th>Volume Used</th>
+                    <th>Total Volume</th>
+                    <th>Percent Filled</th>
+                </tr>
+                @{
+                    var paginatedTable = Model.PaginatedTable;
+
+                    int start = (Model.CurrentPage - 1) * paginatedTable.PageSize;
+                    if (start < 0)
+                    {
+                        start = 0;
+                    }
+                    var containerList = Model.ShipmentContainers.ContainerMap.Keys.ToList<string>();
+
+                    for (int i = start; i < start + paginatedTable.PageSize; i++)
+                    {
+                        if (i >= containerList.Count)
+                        {
+                            break;
+                        }
+                        var container = containerList[i];
+                        var volumedUsed = Model.ShipmentContainers.GetUsedVolume(container);
+                        var totalVolume = Model.ShipmentContainers.GetTotalVolume(container);
+                        var percentFilled = Model.ShipmentContainers.GetPercentUsedVolume(container);
+
+                        <tr>
+                            <td><a href="/Forms/Container/ViewContainer?ContainerNumber=@container">@container</a></td>
+                            <td>@volumedUsed ft cubed</td>
+                            <td>@totalVolume ft cubed</td>
+                            <td>@percentFilled %</td>
+                        </tr>
+                    }
+                }
+
+            </table>
+
+        </div>
+    }
+
+</div>
+
+
+<link rel="stylesheet" href="~/css/create_form.css">
+<form class="form" method="post" id="create_form">
+
+    <header>Add Container To Shipment</header>
+    <div class="information-container" id="styled_form">
+
+        <label for="ContainerNumber">Container Number:</label>
+        <input type="text" id="ContainerNumber" name="ContainerNumber" />
+    </div>
+
+    <input type="submit" value="Add Container" asp-page-handler="AddContainerButton" />
+
+</form>
