@@ -4,59 +4,86 @@
     ViewData["Title"] = "WasteDeclarationForm";
 }
 
+<link rel="stylesheet" href="~/css/create_form.css">
+<form class="form" method="post" id="create_form">
 
-<link rel="stylesheet" href="~/css/form.css">
-<form class="form" method="post" id="styled_form">
+    <header>Search By Field</header>
+    <div class="information-container" id="styled_form">
 
-    <label for="SearchDeclaration">Search Declaration Number:</label>
-    <input type="text" id="SearchDeclaration" name="SearchDeclaration">
+        <label for="SearchDeclaration">Declaration Number:</label>
+        <input type="text" id="SearchDeclaration" name="SearchDeclaration" />
 
-    <label for="SearchContainer">Search Container Number:</label>
-    <input type="text" id="SearchContainer" name="SearchContainer">
+
+        <label for="SearchContainer">Container Number:</label>
+        <input type="text" id="SearchContainer" name="SearchContainer">
+    </div>
 
     <input type="submit" value="Search" asp-page-handler="SearchButton" />
-    
+
     <input type="submit" value="Clear" asp-page-handler="ClearButton" />
 </form>
 
 <br />
 
-<b>Waste Declaration Forms Found: @Model.WasteForms.Count</b>
+<b>Waste Declaration Forms Found: @Model.ItemHandler.ItemList.Count</b>
 
 <link rel="stylesheet" href="~/css/table.css">
 <table id="styled_table">
     <tr>
         <th>Declaration Number</th>
         <th>Container Number</th>
-        <th>Location</th>
         <th>Description</th>
-        <th>Generation Process</th>
-
+        <th>Location</th>
+        <th>Hazardous Material</th>
     </tr>
 
-    @foreach (var element in @Model.WasteForms)
-    {
+    @{
+        int start = (Model.CurrentPage - 1) * Model.PaginatedTable.PageSize;
+        if (start < 0)
+        {
+            start = 0;
+        }
+        for (int i = start; i < start + Model.PaginatedTable.PageSize; i++)
+        {
+            if (i >= Model.ItemHandler.ItemList.Count)
+            {
+                break;
+            }
+            var element = Model.ItemHandler.ItemList[i];
 
-        var declarationNumber = element.DeclarationNumber;
-        var containerNumber = element.ContainerNumber;
-        var location = element.Location;
-        var description = element.ItemDescription;
-        var generationProcess = element.GenerationProcess;
-        <tr>
-            <td><a href="/Forms/Items/PreviewWasteDeclarationForm?DeclarationNumber=@declarationNumber">@Html.DisplayFor(m => declarationNumber)</a></td>
-            <td><a href="/Forms/Container/ViewContainer?ContainerNumber=@containerNumber">@Html.DisplayFor(m => containerNumber)</a></td>
-            <td>@Html.DisplayFor(m => location)</td>
-            <td>@Html.DisplayFor(m => description)</td>
-            <td>@Html.DisplayFor(m => generationProcess)</td>
-        </tr>
+            var declarationNumber = element.DeclarationNumber;
+            var containerNumber = element.ContainerNumber;
+            var description = element.ItemDescription;
+            var location = element.Location;
+            var hazardousMaterial = element.HarzardousMaterial ? "Yes" : "No";
+
+            <tr>
+                <td><a href="/Forms/Items/PreviewWasteDeclarationForm?DeclarationNumber=@declarationNumber">@Html.DisplayFor(m => declarationNumber)</a></td>
+                <td><a href="/Forms/Container/ViewContainer?ContainerNumber=@containerNumber">@Html.DisplayFor(m => containerNumber)</a></td>
+                <td>@Html.DisplayFor(m => description)</td>
+                <td>@Html.DisplayFor(m => location)</td>
+                <td>@hazardousMaterial</td>
+            </tr>
+        }
     }
 
 </table>
 
+<div>
+    <ul class="pagination">
+        @for (var i = 1; i <= Model.PaginatedTable.TotalPages; i++)
+        {
+            <li class="page-item @(i == Model.CurrentPage ? "active" : "")">
+                <a href="/Forms/Items/WasteDeclarationForm?CurrentPage=@i@Model.ItemHandler.Search.GetURLSearch()" class="page-link">@i</a>
+            </li>
+        }
+    </ul>
+</div>
+
 <br />
 
-<link rel="stylesheet" href="~/css/form.css">
-<form class="form" method="post" id="styled_create_record">
+<link rel="stylesheet" href="~/css/create_form.css">
+<form class="form" method="post" id="create_form">
     <input type="submit" value="Create Waste Form" asp-page-handler="CreateButton" />
 </form>
 

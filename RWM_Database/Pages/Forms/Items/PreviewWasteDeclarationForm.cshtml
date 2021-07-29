@@ -4,26 +4,116 @@
     ViewData["Title"] = "PreviewWasteDeclarationForm";
 }
 
-<h1>PreviewWasteDeclarationForm</h1>
+<link rel="stylesheet" href="~/css/view_item.css">
+<div id="styled_item">
+    @{
+        var WasteForm = Model.Form;
+        var declarationNumber = WasteForm.DeclarationNumber;
+        var containerNumber = WasteForm.ContainerNumber;
+        var description = WasteForm.ItemDescription;
+        var location = WasteForm.Location;
+        var accountNumber = WasteForm.AccountNumber;
 
-@{
-    var WasteForm = Model.Form;
+        var hazardousMaterial = WasteForm.HarzardousMaterial;
+        var length = WasteForm.Length;
+        var width = WasteForm.Width;
+        var height = WasteForm.Height;
+        var volume = length * width * height;
 
-    var data = Model.Form;
-    var declarationNumber = WasteForm.DeclarationNumber;
-    var containerNumber = WasteForm.ContainerNumber;
-    var location = WasteForm.Location;
-    var description = WasteForm.ItemDescription;
-    var generationProcess = WasteForm.GenerationProcess;
 
-    <b>Declaration Number: </b>@Html.DisplayFor(m => declarationNumber)
-    <br />
-    <b>Container Number: </b>@Html.DisplayFor(m => containerNumber)
-    <br />
-    <b>Location: </b>@Html.DisplayFor(m => location)
-    <br />
-    <b>Description: </b>@Html.DisplayFor(m => location)
-    <br />
-    <b>Generation Process: </b>@Html.DisplayFor(m => generationProcess)
-    <br />
-}
+        var generatorName = WasteForm.GeneratorName;
+        var generationDate = WasteForm.GenerationDate;
+        var recievedBy = WasteForm.RecievedBy;
+        var recievedDate = WasteForm.RecievedDate;
+
+        <header>Item Information </header>
+
+        <div class="information-container" id="styled_item">
+            <label>Declaration Number:</label>
+            <p>@declarationNumber</p>
+
+            <label>Container Number:</label>
+            <p>@containerNumber</p>
+
+            <label>Description:</label>
+            <p>@description</p>
+
+            <label>Location:</label>
+            <p>@location</p>
+
+            <label>Account Number:</label>
+            <p>@accountNumber</p>
+
+        </div>
+
+        <header>Physical Properties </header>
+
+        <div class="information-container" id="styled_item">
+
+            <label>Hazardous Material:</label>
+            <p>@hazardousMaterial</p>
+
+            <label>Length:</label>
+            <p>@length</p>
+
+            <label>Width:</label>
+            <p>@width</p>
+
+            <label>Height:</label>
+            <p>@height</p>
+
+            <label>Calculated Volume:</label>
+            <p>@volume</p>
+
+        </div>
+
+        <header>Creation Details </header>
+
+        <div class="information-container" id="styled_item">
+
+            <label>Generator Name:</label>
+            <p>@generatorName</p>
+
+            <label>Generation Date:</label>
+            <p>@generationDate</p>
+
+            <label>Recieved By:</label>
+            <p>@recievedBy</p>
+
+            <label>Recieved Date:</label>
+            <p>@recievedDate</p>
+
+        </div>
+
+        <header>Attachments</header>
+        <div class="table-container" id="styled_item">
+
+            <link rel="stylesheet" href="~/css/table.css">
+            <table id="styled_table">
+                <tr>
+                    <th>File Name</th>
+                    <th>Date Submitted</th>
+                    <th>Submitted By</th>
+                </tr>
+
+                @foreach (var attachment in Model.AttachmentList)
+                {
+                    <tr>
+                        <td><a href="/Attachment/ViewAttachment?FileName=@attachment.GetAttachmentName()" id="fileName">@attachment.GetAttachmentName()</a></td>
+                        <td>@attachment.GetAttachmentDate()</td>
+                        <td>@attachment.GetAttachmentCreator()</td>
+                    </tr>
+                }
+
+            </table>
+
+            <link rel="stylesheet" href="~/css/upload_button.css">
+
+            <form method="post" enctype="multipart/form-data" id="upload_button">
+                <input type="file" asp-for="File" />
+                <input type="submit" value="Submit Attachment" />
+            </form>
+        </div>
+    }
+
+</div>

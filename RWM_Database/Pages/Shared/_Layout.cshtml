@@ -19,7 +19,7 @@
                 <div class="navbar-collapse collapse d-sm-inline-flex flex-sm-row-reverse">
                     <ul class="navbar-nav flex-grow-1">
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-page="/Index">Home</a>
+                            <a class="nav-link text-dark" asp-area="" asp-page="/Index">Dashboard</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-page="/Forms/Items/WasteDeclarationForm">Items View</a>
@@ -28,13 +28,20 @@
                             <a class="nav-link text-dark" asp-area="" asp-page="/Forms/Container/CreateContainer">Container View</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-page="/Forms/Attachment">Attachment</a>
+                            <a class="nav-link text-dark" asp-area="" asp-page="/Forms/Shipment/ShipmentDashboard">Shipment View</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-page="/Forms/Burial/BurialDashboard">Burial View</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-page="/Forms/Reports/GenerateReport">Reports</a>
                         </li>
                     </ul>
                 </div>
             </div>
-        </nav>
+        </nav>  
     </header>
+
     <div class="container">
         <main role="main" class="pb-3">
             @RenderBody()

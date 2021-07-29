@@ -1,0 +1,36 @@
+﻿@page
+@model RWM_Database.Pages.Forms.Burial.CreateBurialModel
+@{
+}
+
+<link rel="stylesheet" href="~/css/create_form.css">
+
+<b id="create_form">Burial Declaration Form</b>
+
+
+<form class="form" method="post" id="create_form">
+
+    <header>Shipment Information</header>
+    <div class="information-container" id="styled_form">
+        <label for="BurialNumber">Burial Number:</label>
+        <input type="text" id="BurialNumber" name="BurialNumber" required>
+
+        <label for="Certificate">Certificate:</label>
+        <input type="text" id="Certificate" name="Certificate" required>
+
+        <label for="CertificateDate">Certificate Date:</label>
+        <input type="date" id="CertificateDate" name="CertificateDate" required>
+
+
+    </div>
+
+    <header>Specifications</header>
+    <div class="information-container" id="styled_form">
+
+    </div>
+
+
+
+
+    <input type="submit" value="Submit Burial" asp-page-handler="SubmitButton" />
+</form>

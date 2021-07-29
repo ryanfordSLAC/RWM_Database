@@ -1,11 +1,87 @@
 ﻿@page
 @model IndexModel
 @{
-    ViewData["Title"] = "Home page";
+    ViewData["Title"] = "Dashboard";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Radioactive Materials Web Management</h1>
-    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+<link rel="stylesheet" href="~/css/view_item.css">
+<div id="styled_item">
+    @{
+
+
+        var ContainerHandler = Model.ContainerHandler;
+        var emptyContainers = ContainerHandler.CountEmptyContainers();
+        var filledContainers = ContainerHandler.CountFilledContainers();
+        var inProgess = ContainerHandler.CountInProgessContainers();
+        var overCapacityContainers = ContainerHandler.CountOvercapacityContainers();
+
+
+        <header>Items Summary </header>
+
+        <div class="information-container" id="styled_item">
+            <label>Number Of Items Total:</label>
+            <p>@Model.ItemReport.CountTotalItems()</p>
+
+            <label>Number Of Items Shipped:</label>
+            <p>0</p>
+
+            <label>Number Of Items Hazardous:</label>
+            <p>@Model.ItemReport.CountHazardousItems()</p>
+
+        </div>
+
+        <header>Container Summary </header>
+
+        <div class="information-container" id="styled_item">
+            <label>Empty Containers:</label>
+            <p>@emptyContainers</p>
+
+            <label>In Progess Containers:</label>
+            <p>@filledContainers</p>
+
+            <label>Filled Containers:</label>
+            <p>@inProgess</p>
+
+            <label>Overcapacity Containers:</label>
+            <p>@overCapacityContainers</p>
+
+        </div>
+
+        <header>Shipment Summary </header>
+
+        <div class="information-container" id="styled_item">
+            <label>Number of Shipments Total:</label>
+            <p>0</p>
+
+            <label>Shipments by Fiscal Year:</label>
+            <p>0</p>
+
+        </div>
+
+        <header>Burial Summary </header>
+
+        <div class="information-container" id="styled_item">
+            <label>Burials By Fiscal Year:</label>
+            <p>0</p>
+
+            <label>Shipments by Fiscal Year:</label>
+            <p>0</p>
+
+        </div>
+
+        <header>Fiscal Year Summary </header>
+
+        <div class="information-container" id="styled_item">
+            <label>LLRW Shipped:</label>
+            <p>0</p>
+
+            <label>LLMW Shipped:</label>
+            <p>0</p>
+
+        </div>
+    }
+
 </div>
+
+
 

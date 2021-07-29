@@ -4,35 +4,113 @@
     ViewData["Title"] = "CreateWasteForm";
 }
 
-<link rel="stylesheet" href="~/css/form.css">
-<form class="form" method="post" id="styled_form">
+@section scripts
+{
+    <script src="@Url.Content("~/js/volume.js")"></script>
+}
 
-    <label for="DeclarationNumber">Declaration Number:</label>
-    <input type="text" id="DeclarationNumber" name="DeclarationNumber">
 
-    <label for="ContainerNumber">Container Number:</label>
-    <select id="ContainerNumber" name="ContainerNumber">
-        @foreach (var container in @Model.ContainerList)
+<link rel="stylesheet" href="~/css/create_form.css">
+
+<b id="create_form">Radioactive Material Declaration Form</b>
+
+
+
+<form class="form" method="post" id="create_form">
+
+    <header>Item Information</header>
+    <div class="information-container" id="styled_form">
+        <label for="DeclarationNumber">Declaration Number:</label>
+        <input type="text" id="DeclarationNumber" name="DeclarationNumber" required>
+
+
+        <label for="ItemDescription">Item Description:</label> 
+        <input type="text" id="ItemDescription" name="ItemDescription" required>
+
+        <label for="Location">Location:</label>
+        <input type="text" id="Location" name="Location" required>
+
+        <label for="AccountNumber">Account Number:</label>
+        <input type="text" id="AccountNumber" name="AccountNumber" required>
+
+        <label for="HazardousMaterial">Hazardous Material:</label>
+        <select id="HazardousMaterial" name="HazardousMaterial">
+            <option value="1">Yes</option>
+            <option value="0">No</option>
+        </select>
+
+
+        <label for="GeneratorName">Generator Name:</label>
+        <input type="text" id="GeneratorName" name="GeneratorName" required>
+
+        <label for="GenerationDate">Generation Date:</label>
+        <input type="date" id="GenerationDate" name="GenerationDate" required>
+
+
+        <label for="RecievedBy">Recieved By:</label>
+        <input type="text" id="RecievedBy" name="RecievedBy" required>
+
+        <label for="RecievedDate">Recieved Date:</label>
+        <input type="date" id="RecievedDate" name="RecievedDate" required>
+
+    </div>
+
+    <header>Packing Specifications</header>
+    <div class="information-container" id="styled_form">
+
+        <label for="ContainerNumber">Select Container:</label>
+
+        @foreach (var container in @Model.ContainerHandler.ContainerMap.Keys)
         {
-        <option value="@container">@container</option>
+            var usedVolume = @Model.ContainerHandler.GetUsedVolume(container);
+            var totalVolume = @Model.ContainerHandler.GetTotalVolume(container);
+            <input type="hidden" id="hidden_used_@container" name="containerValue" value="@usedVolume">
+            <input type="hidden" id="hidden_total_@container" name="containerValue" value="@totalVolume">
         }
 
-    </select>
+        <select id="ContainerNumber" name="ContainerNumber" onchange="calcAddedVolume()">
+            @foreach (var container in @Model.ContainerHandler.ContainerMap.Keys)
+            {
+                var usedVolume = @Model.ContainerHandler.GetPercentUsedVolume(container);
+                <option value="@container">@container &emsp; @usedVolume% capacity</option>
+            }
+        </select>
 
-    <label for="Location">Location:</label>
-    <input type="text" id="Location" name="Location">
+        <label for="Length">Item Length:</label>
+        <input type="text" id="Length" name="Length" onkeyup="volume()" required>
 
-    <label for="ItemDescription">Item Description:</label>
-    <input type="text" id="ItemDescription" name="ItemDescription">
+        <label for="Width">Item Width:</label>
+        <input type="text" id="Width" name="Width" onkeyup="volume()" required>
 
-    <label for="GenerationProcess">Generation Process:</label>
-    <select id="GenerationProcess" name="GenerationProcess">
-        <option value="special_project">Special Project</option>
-        <option value="facility_upgrade">Facility Upgrade</option>
-    </select>
+        <label for="Height">Item Height:</label>
+        <input type="text" id="Height" name="Height" onkeyup="volume()" required>
+
+    </div>
+
+    <header>Calculated Volume</header>
+    <div class="information-container-units" id="styled_form">
+
+        <label>Item Volume:</label>
+        <p id="Volume"></p>
+        <p>inches cubed</p>
+
+        <label>Container Volume Before Adding Item:</label>
+        <p id="PreviousVolume"></p>
+        <p>inches cubed</p>
+
+        <label>Container Volume After Adding Item:</label>
+        <p id="PostVolume"></p>
+        <p>inches cubed</p>
+
+        <label>Volume Filled:</label>
+        <p id="PercentFilled"></p>
+        <p>%</p>
+
+    </div>
 
 
-    <input type="submit" value="Submit" asp-page-handler="SubmitButton" />
+
+    <input type="submit" value="Submit Form" asp-page-handler="SubmitButton" />
 </form>
 
 

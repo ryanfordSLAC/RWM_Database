@@ -1,5 +1,6 @@
 ﻿using Microsoft.Extensions.Configuration;
 using MySql.Data.MySqlClient;
+using RWM_Database.Utility;
 using System;
 using System.Collections.Generic;
 using System.Configuration;
@@ -26,7 +27,6 @@ namespace RWM_Database
             //open MySQL connection. TODO: keep a persistent mysql connection open.
 
             string login = GetLoginCredentials();
-            Console.WriteLine(login);
             MySqlConnection connection = new MySqlConnection(login);
 
             connection.Open();
@@ -40,7 +40,7 @@ namespace RWM_Database
         * if it has not been loaded already
         */
 
-        private static string GetLoginCredentials()
+        public static string GetLoginCredentials()
         {
             if (connectionString == null)
             {
@@ -54,5 +54,40 @@ namespace RWM_Database
             return connectionString;
         }
 
+
+        public static string GetSearchCommand(string start, SearchByField search, MySqlCommand command)
+        {
+            string sql = start;
+
+            Dictionary<string, string> searchMap = search.GetSearchMap();
+
+            if (searchMap.Count > 0)
+            {
+                sql += " WHERE ";
+            }
+
+            int count = 0;
+            foreach (string field in searchMap.Keys)
+            {
+                if (count < searchMap.Count)
+                {
+
+                }
+                bool hasVal = searchMap.TryGetValue(field, out string value);
+
+                if (hasVal)
+                {
+                    sql += field + "=@" + field;
+                    command.Parameters.AddWithValue("@" + field, value);
+                }
+                count++;
+
+                if (count < searchMap.Count)
+                {
+                    sql += " AND "; 
+                }
+            }
+            return sql;
+        }
     }
 }

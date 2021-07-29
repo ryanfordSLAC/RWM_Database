@@ -12,11 +12,13 @@ namespace RWM_Database.Pages.Forms
     public class CreateWasteFormModel : PageModel
     {
 
-        public List<string> ContainerList { get; set; }
+        public PackedContainerHandler ContainerHandler { get; set; }
+
+
 
         public void OnGet()
         {
-            ContainerList = this.GetContainerList();
+            ContainerHandler = new PackedContainerHandler(null);
         }
 
         public IActionResult OnPostSubmitButton(IFormCollection data)
@@ -26,22 +28,33 @@ namespace RWM_Database.Pages.Forms
         }
 
 
+
         /*
         Creates the waste declaration form entry in the MySQL Database
         */
+
+
 
         private void CreateWasteDeclarationItem(IFormCollection data)
         {
             try
             {
-
                 MySqlCommand command = MySQLHandler.GetMySQLConnection().CreateCommand();
-                command.CommandText = ("INSERT INTO items VALUES(0, @DeclarationNumber, @ContainerNumber, @Location, @ItemDescription, @GenerationProcess)");
+                command.CommandText = ("INSERT INTO items VALUES(0, @DeclarationNumber, @ContainerNumber, @ItemDescription, @Location, @AccountNumber, @HazardousMaterial, @GeneratorName, @GenerationDate, @RecievedBy, @RecievedDate, @Length, @Width, @Height)");
                 command.Parameters.AddWithValue("@DeclarationNumber", data["DeclarationNumber"]);
                 command.Parameters.AddWithValue("@ContainerNumber", data["ContainerNumber"]);
-                command.Parameters.AddWithValue("@Location", data["Location"]);
                 command.Parameters.AddWithValue("@ItemDescription", data["ItemDescription"]);
-                command.Parameters.AddWithValue("@GenerationProcess", data["GenerationProcess"]);
+                command.Parameters.AddWithValue("@Location", data["Location"]);
+                command.Parameters.AddWithValue("@AccountNumber", data["AccountNumber"]);
+                command.Parameters.AddWithValue("@HazardousMaterial", data["HazardousMaterial"]);
+                command.Parameters.AddWithValue("@GeneratorName", data["GeneratorName"]);
+                command.Parameters.AddWithValue("@GenerationDate", data["GenerationDate"]);
+                command.Parameters.AddWithValue("@RecievedBy", data["RecievedBy"]);
+                command.Parameters.AddWithValue("@RecievedDate", data["RecievedDate"]);
+                command.Parameters.AddWithValue("@Length", (float)Convert.ToDouble(data["Length"]));
+                command.Parameters.AddWithValue("@Width", (float)Convert.ToDouble(data["Width"]));
+                command.Parameters.AddWithValue("@Height", (float)Convert.ToDouble(data["Height"]));
+                Console.WriteLine(command.CommandText);
                 command.ExecuteReader();
             }
             catch (MySqlException ex)
@@ -50,40 +63,5 @@ namespace RWM_Database.Pages.Forms
             }
         }
 
-
-        /*
-   * Load all containers from the table to show in the waste form creator
-   */
-
-        private List<string> GetContainerList()
-        {
-
-            List<string> containerList = new List<string>();
-            try
-            {
-                MySqlConnection connection = MySQLHandler.GetMySQLConnection();
-                MySqlCommand command = connection.CreateCommand();
-                command.CommandText = "SELECT container_number from container";
-
-                MySqlDataReader read = command.ExecuteReader();
-
-                if (read.HasRows)
-                {
-                    while (read.Read())
-                    {
-                        string containerNumber = read.GetString(0);
-
-                        containerList.Add(containerNumber);
-                    }
-                }
-                connection.Close();
-            }
-            catch (MySqlException ex)
-            {
-                Console.WriteLine(ex.Message.ToString());
-            }
-            return containerList;
-        }
     }
-
 }

@@ -1,0 +1,8 @@
+﻿#upload_button {
+    color: gray;
+    background-color: white;
+    border-radius: 8px;
+    margin-top: 10px;
+    font-size: 15px;
+    font-weight: bold;
+}

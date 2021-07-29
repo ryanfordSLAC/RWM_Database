@@ -44,10 +44,15 @@ namespace RWM_Database.Pages.Forms
             {
 
                 MySqlCommand command = MySQLHandler.GetMySQLConnection().CreateCommand();
-                command.CommandText = ("INSERT INTO container VALUES(0, @ContainerNumber, @SealNumber, @Type)");
+                command.CommandText = ("INSERT INTO container VALUES(0, @ContainerNumber, @SealNumber, @Type, @DatePacked, @PackedBy, @DateCreated, @UserID, @ShipmentNumber)");
                 command.Parameters.AddWithValue("@ContainerNumber", data["ContainerNumber"]);
                 command.Parameters.AddWithValue("@SealNumber", data["SealNumber"]);
                 command.Parameters.AddWithValue("@Type", data["Type"]);
+                command.Parameters.AddWithValue("@DatePacked", data["DatePacked"]);
+                command.Parameters.AddWithValue("@PackedBy", data["PackedBy"]);
+                command.Parameters.AddWithValue("@DateCreated", "null");
+                command.Parameters.AddWithValue("@UserID", "null");
+                command.Parameters.AddWithValue("@ShipmentNumber", "null");
                 command.ExecuteReader();
             }
             catch (MySqlException ex)
@@ -71,9 +76,13 @@ namespace RWM_Database.Pages.Forms
                 {
                     while (read.Read())
                     {
-                        string containerNumber = read.GetString(1);
-                        string sealNumber = read.GetString(2);
-                        string type = read.GetString(3);
+                        string containerNumber = read.GetString("container_number");
+                        string sealNumber = read.GetString("seal_number");
+                        string type = read.GetString("type");
+                        string datePacked = read.GetString("date_packed");
+                        string packedBy = read.GetString("packed_by");
+                        string dateCreated = read.GetString("date_created");
+                        string userId = read.GetString("user_id");
                         list.Add(new ContainerData(containerNumber, sealNumber, type));
                     }
                 }
