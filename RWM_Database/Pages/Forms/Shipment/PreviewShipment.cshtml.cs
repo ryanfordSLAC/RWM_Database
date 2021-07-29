@@ -28,6 +28,7 @@ namespace RWM_Database.Pages.Forms.Shipment
 
         public void OnGet()
         {
+            Console.WriteLine(ShipmentNumber);
             Shipment = ShipmentHandler.LoadShipment(ShipmentNumber);
             ShipmentContainers = new PackedContainerHandler(ShipmentNumber);
             PaginatedTable = new PaginatedTable(10, ShipmentContainers.ContainerMap.Count);

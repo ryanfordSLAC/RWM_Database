@@ -83,9 +83,10 @@ namespace RWM_Database.Backend
             {
 
                 MySqlCommand command = MySQLHandler.GetMySQLConnection().CreateCommand();
-                command.CommandText = ("INSERT INTO burial VALUES(0, @BurialNumber, @Certificate)");
+                command.CommandText = ("INSERT INTO burial VALUES(0, @BurialNumber, @Certificate, @CertificateDate)");
                 command.Parameters.AddWithValue("@BurialNumber", data["BurialNumber"]);
                 command.Parameters.AddWithValue("@Certificate", data["Certificate"]);
+                command.Parameters.AddWithValue("@CertificateDate", data["CertificateDate"]);
                 command.ExecuteReader();
             }
             catch (MySqlException ex)

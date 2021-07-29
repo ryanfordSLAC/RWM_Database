@@ -79,12 +79,15 @@ namespace RWM_Database.Backend
         {
             try
             {
-
+                
                 MySqlCommand command = MySQLHandler.GetMySQLConnection().CreateCommand();
-                command.CommandText = ("INSERT INTO shipment VALUES(0, @ShipmentNumber, @ShipmentType, @ShipmentConveyance)");
+                command.CommandText = ("INSERT INTO shipment VALUES(0, @ShipmentNumber, @ShipmentType, @ShipmentConveyance, @BurialId, @DateShipped, @DateRecieved)");
                 command.Parameters.AddWithValue("@ShipmentNumber", data["ShipmentNumber"]);
                 command.Parameters.AddWithValue("@ShipmentType", data["ShipmentType"]);
                 command.Parameters.AddWithValue("@ShipmentConveyance", data["ShipmentConveyance"]);
+                command.Parameters.AddWithValue("@BurialId", data["BurialId"]);
+                command.Parameters.AddWithValue("@DateShipped", data["DateShipped"]);
+                command.Parameters.AddWithValue("@DateRecieved", data["DateRecieved"]);
                 command.ExecuteReader();
             }
             catch (MySqlException ex)
@@ -103,6 +106,7 @@ namespace RWM_Database.Backend
 
                 command.CommandText = "SELECT * FROM shipment WHERE shipment_number = @ShipmentNumber";
                 command.Parameters.AddWithValue("@ShipmentNumber", shipmentNumber);
+                Console.WriteLine(command.CommandText);
                 MySqlDataReader read = command.ExecuteReader();
                 if (read.HasRows)
                 {
