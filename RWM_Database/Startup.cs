@@ -20,9 +20,12 @@ namespace RWM_Database
 
         public IConfiguration Configuration { get; }
 
+        
+
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            Settings.LoadSettings(Configuration.GetSection("Settings").GetChildren().ToDictionary(x => x.Key, x => x.Value));
             services.AddRazorPages();
         }
 

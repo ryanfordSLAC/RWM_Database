@@ -1,8 +1,15 @@
 ﻿#create_form header {
     margin-top: 30px;
     margin-bottom: 5px;
+    font-size: 18px;
     font-weight: bold;
-    font-size: 15px;
+    font-family: Helvetica;
+    color: #D13000;
+}
+
+#create_form b {
+    font-size: 36px;
+    color: #ffffff;
 }
 
 label {
@@ -69,7 +76,45 @@ input[type=text] {
     font-size: 14px;
     margin-top: 5px;
     margin-bottom: 30px;
+    margin-right: 0px;
     padding: 2px 14px;
     text-decoration: none;
     text-shadow: 0px 1px 0px #154682;
 }
+
+[data-tip] {
+    position: relative;
+}
+
+    [data-tip]:before {
+        content: '';
+        /* hides the tooltip when not hovered */
+        display: none;
+        content: '';
+        display: none;
+    }
+
+    [data-tip]:after {
+        display: none;
+        content: attr(data-tip);
+        position: absolute;
+        top: 35px;
+        left: 0px;
+        padding: 5px 8px;
+        background: #124d77;
+        color: #fff;
+        z-index: 9;
+        font-size: .85em;
+        height: 30px;
+        line-height: 18px;
+        -webkit-border-radius: 3px;
+        -moz-border-radius: 3px;
+        border-radius: 3px;
+        white-space: nowrap;
+        word-wrap: normal;
+    }
+
+    [data-tip]:hover:before,
+    [data-tip]:hover:after {
+        display: block;
+    }

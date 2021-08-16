@@ -1,0 +1,127 @@
+﻿@page
+@model RWM_Database.Pages.Forms.ListType.ListTypeDashboardModel
+@{
+    ViewData["Title"] = "ListDashboard";
+}
+
+@section scripts
+{
+    <script src="@Url.Content("~/js/list_type.js")"></script>
+}
+
+
+<link rel="stylesheet" href="~/css/create_form.css">
+
+<b id="create_form">List Dashboard</b>
+
+
+
+<form class="form" method="post" id="create_form">
+
+    <header>Select List Type</header>
+    <div class="information-container" id="styled_form">
+
+        <label for="ListName">List Name:</label>
+        <select id="ListName" name="ListName">
+
+            @{
+                foreach (string name in Model.TableNames)
+                {
+                    <option value="@name">@name</option>
+                }
+            }
+        </select>
+
+    </div>
+
+    <input type="submit" value="Retrieve List" asp-page-handler="SubmitButton" />
+</form>
+
+@{ 
+    if (Model.table == null)
+    {
+        return;
+    }
+}
+
+<form class="form" method="post" id="create_form">
+
+    <header>Add to List</header>
+    <div class="information-container" id="styled_form">
+        @{
+            var table = Model.table;
+            if (table != null)
+            {
+                foreach (string column in table.map.Keys)
+                {
+                    var data = table.map[column];
+
+                    <label for="@column">@column:</label>
+
+                    if (data.IsNumericType())
+                    {
+                        <input type="number" id="@column" name="@column" required>
+                    }
+                    else
+                    {
+                        <input type="text" id="@column" name="@column" required>
+                    }
+                }
+            }
+        }
+
+
+    </div>
+ 
+    <input type="submit" value="Add" asp-page-handler="AddButton" asp-route-listName="@Model.ListName" />
+</form>
+
+
+<link rel="stylesheet" href="~/css/table.css">
+<table id="styled_table">
+    @{
+        <tr>
+            @foreach (string column in Model.table.map.Keys)
+            {
+                <th>@column</th>
+            }
+        </tr>
+        var paginatedTable = Model.PaginatedTable;
+
+        int start = (Model.CurrentPage - 1) * paginatedTable.PageSize;
+        if (start < 0)
+        {
+            start = 0;
+        }
+        for (int i = start; i < start + paginatedTable.PageSize; i++)
+        {
+            if (i >= Model.ListTypeData.Count)
+            {
+                break;
+            }
+            var row = Model.ListTypeData[i];
+            <tr>
+
+                @foreach (string column in row.valueMap.Keys)
+                {
+                    var obj = row.valueMap[column].ToString();
+                    <td>@obj</td>
+                }
+
+            </tr>
+        }
+    }
+
+</table>
+
+<div>
+    <ul class="pagination">
+        @for (var i = 1; i <= paginatedTable.TotalPages; i++)
+        {
+            <li class="page-item @(i == Model.CurrentPage ? "active" : "")">
+                <a href="/Forms/Container/ContainerDashboard?CurrentPage=@i" class="page-link">@i</a>
+            </li>
+        }
+    </ul>
+</div>
+

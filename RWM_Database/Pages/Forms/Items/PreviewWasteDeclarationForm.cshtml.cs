@@ -7,7 +7,10 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using MySql.Data.MySqlClient;
 using RWM_Database.Backend;
+using RWM_Database.Backend.Attachments;
 using RWM_Database.Pages.Forms;
+using RWM_Database.Utility;
+using static RWM_Database.Backend.Attachments.AttachmentHandler;
 using static RWM_Database.Backend.ItemHandler;
 
 namespace RWM_Database.Pages.Forms
@@ -24,144 +27,53 @@ namespace RWM_Database.Pages.Forms
     public class PreviewWasteDeclarationFormModel : PageModel
     {
 
-        [BindProperty(Name = "DeclarationNumber", SupportsGet = true)]
-        public string DeclarationNumber { get; set;}
+        [BindProperty(Name = "ItemId", SupportsGet = true)]
+        public int ItemId { get; set;}
+
+        [BindProperty(Name = "CurrentPage", SupportsGet = true)]
+        public int CurrentPage { get; set; }
 
         public WasteDeclarationData Form { get; set; }
-        public List<AttachmentData> AttachmentList { get; set; } 
+        public List<AttachmentData> AttachmentList { get; set; }
+        public PaginatedTable PaginatedTable { get; set; }
 
         public IFormFile File { get; set; }
 
-        public void OnGet()
+        public IActionResult OnGet()
         {
-            LoadDeclarationForm(DeclarationNumber);
-        }
-
-        public class AttachmentData
-        {
-
-            readonly string name;
-            readonly byte[] data;
-            readonly string date;
-            readonly string creator;
-
-            public AttachmentData(string name, byte[] data, string date, string creator)
+            AttachmentList = new List<AttachmentData>();
+            Form = ItemHandler.LoadItemWithAttachments(ItemId, AttachmentList);
+            if (Form == null)
             {
-                this.name = name;
-                this.data = data;
-                this.date = date;
-                this.creator = creator;
+                return RedirectToPage("/Error", new { CustomError = ("Item not found. item id given: " + ItemId) });
             }
 
-            public string GetAttachmentName()
-            {
-                return name;
-            }
+            PaginatedTable = new PaginatedTable(2, AttachmentList.Count);
 
-            public byte[] GetData()
-            {
-                return this.data;
-            }
-
-            public string GetAttachmentDate()
-            {
-                return date;
-            }
-
-            public string GetAttachmentCreator()
-            {
-                return creator;
-            }
+            return Page();
         }
 
         public IActionResult OnPost(IFormCollection data)
         {
-            Console.WriteLine("post");
+
             if (File != null)
             {
                 //ensure file size > 0
                 long length = File.Length;
                 if (length < 0)
                 {
-                    TempData["error"] = "File size < 0";
+                    return RedirectToPage("/Error", new { CustomError = ("File size < 0") });
                 }
-                else this.UploadFileToDB(File, this.DeclarationNumber);
-            }
-            return RedirectToPage("PreviewWasteDeclarationForm", new { DeclarationNumber = this.DeclarationNumber });
-        }
-
-        /*
-        * Converts attachment file to byte[]
-        * Then uploads to the mysql server
-        */
-
-        private void UploadFileToDB(IFormFile file, string itemReference)
-        {
-            string accountName = "James Meadows"; //TO DO add true account name when user system is created
-
-            try
-            {
-                //file to byte[]
-                using var fileStream = file.OpenReadStream();
-                byte[] buffer = new byte[file.Length];
-                fileStream.Read(buffer, 0, (int)file.Length);
-
-                //Upload the file to the database
-                MySqlCommand command = MySQLHandler.GetMySQLConnection().CreateCommand();
-                command.CommandText = ("INSERT INTO attachments VALUES(0, @ItemReference, @FileName, @Type, @Data, @Date, @Account_name)");
-                command.Parameters.AddWithValue("@ItemReference", itemReference);
-                command.Parameters.AddWithValue("@FileName", file.FileName);
-                command.Parameters.AddWithValue("@Type", "type");
-                command.Parameters.AddWithValue("@Data", buffer);
-                command.Parameters.AddWithValue("@Date", DateTime.Now.ToString("MM-dd-yyyy"));
-                command.Parameters.AddWithValue("@Account_name", accountName);
-                command.ExecuteReader();
-            }
-            catch (MySqlException ex)
-            {
-                Console.WriteLine(ex.Message.ToString());
-            }
-        }
-
-        private void LoadDeclarationForm(string declarationNumber)
-        {
-            AttachmentList = new List<AttachmentData>();
-            try
-            {
-                MySqlConnection connection = MySQLHandler.GetMySQLConnection();
-                MySqlCommand command = connection.CreateCommand();
-                //command.CommandText = "SELECT * FROM items WHERE declaration_number = '" + declarationNumber + "'";
-
-                command.CommandText = "SELECT * FROM items LEFT JOIN attachments ON items.declaration_number = attachments.item_reference WHERE items.declaration_number = @DeclarationNumber";
-                command.Parameters.AddWithValue("@DeclarationNumber", declarationNumber);
-                MySqlDataReader read = command.ExecuteReader();
-                if (read.HasRows)
+                else if (length > 16000000)
                 {
-                    while (read.Read())
-                    {
-                        Form = ItemHandler.CreateItemDataObject(read);
-
-                        if (!read.IsDBNull(read.GetOrdinal("file_name")))
-                        {
-                            
-                            string fileName = read.GetString("file_name");
-                            string type = read.GetString("type");
-                            byte[] byte_data = (byte[])read["data"];
-                            string date = read.GetString("date");
-                            string account_name = read.GetString("account_name");
-
-                            AttachmentList.Add(new AttachmentData(fileName, byte_data, date, account_name));
-                        }
-                    }
+                    return RedirectToPage("/Error", new { CustomError = ("File Too Big. File size > 16 MB") });
                 }
-                connection.Close();
+                else AttachmentHandler.UploadFileToDB(File, this.ItemId, "James Meadows");
             }
-            catch (MySqlException ex)
-            {
-                Console.WriteLine(ex.Message.ToString());
-            }
-
+            return RedirectToPage("PreviewWasteDeclarationForm", new { ItemId = this.ItemId });
         }
+
+
 
     }
 }

@@ -17,23 +17,35 @@ namespace RWM_Database.Pages.Forms.Attachment
     public class ViewAttachmentModel : PageModel
     {
 
-        [BindProperty(Name = "FileName", SupportsGet = true)]
+        [BindProperty(Name = "FileId", SupportsGet = true)]
+        public int FileId { get; set; }
+
+        public byte[] ContentData { get; set; }
+
         public string FileName { get; set; }
 
-        public byte[] ImagePreview { get; set; }
-
-        public void OnGet()
+        public ActionResult OnGet()
         {
-            LoadAttachment(FileName);
+            LoadAttachment(FileId);
+
+            if (ContentData == null || FileName == null)
+            {
+                return RedirectToPage("/Error", new { CustomError = ("Attachment not found. id given: " + FileId) });
+            }
+            if (FileName.EndsWith(".pdf"))
+            {
+                return DisplayPDF();
+            }
+            else return Page();
         }
 
-        private void LoadAttachment(string name)
+        private void LoadAttachment(int id)
         {
             try
             {
                 MySqlConnection connection = MySQLHandler.GetMySQLConnection();
                 MySqlCommand command = connection.CreateCommand();
-                command.CommandText = "SELECT * FROM attachments WHERE file_name = '" + name + "'";
+                command.CommandText = "SELECT * FROM attachments WHERE attachment_id = '" + id + "'";
 
                 MySqlDataReader read = command.ExecuteReader();
 
@@ -41,7 +53,8 @@ namespace RWM_Database.Pages.Forms.Attachment
                 {
                     while (read.Read())
                     {
-                        ImagePreview = (byte[])read["data"];
+                        FileName = read.GetString("file_name");
+                        ContentData = (byte[])read["data"];
                     }
                 }
                 connection.Close();
@@ -50,6 +63,11 @@ namespace RWM_Database.Pages.Forms.Attachment
             {
                 Console.WriteLine(ex.Message.ToString());
             }
+        }
+
+        public ActionResult DisplayPDF()
+        {
+            return new FileContentResult(ContentData, "application/pdf");
         }
 
     }

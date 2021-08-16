@@ -5,54 +5,54 @@
 }
 
 
-<b>Containers Available: @Model.ContainerList.Count</b>
-
-<link rel="stylesheet" href="~/css/table.css">
-<table id="styled_table">
-    <tr>
-        <th>Container Number</th>
-        <th>Seal Number</th>
-        <th>Type</th>
-
-    </tr>
-
-    @foreach (var element in @Model.ContainerList)
-    {
-        var containerNumber = element.ContainerNumber;
-        var sealNumber = element.SealNumber;
-        var type = element.Type;
-        <tr>
-            <td>@Html.DisplayFor(m => containerNumber)</td>
-            <td>@Html.DisplayFor(m => sealNumber)</td>
-            <td>@Html.DisplayFor(m => type)</td>
-        </tr>
-    }
-
-</table>
-
-<br />
-<br />
-
 <link rel="stylesheet" href="~/css/create_form.css">
+
+<b style="font-size: 26px">Container Declaration Form</b>
+
 <form class="form" method="post" id="create_form">
 
     <header>Container Information</header>
     <div class="information-container" id="styled_form">
         <label for="ContainerNumber">Container Number:</label>
-        <input type="text" id="ContainerNumber" name="ContainerNumber" required>
+
+        <div data-tip="@Settings.GetStringSetting("Container_Number_Tip")">
+
+            @{
+                var containerNumberFormatLength1 = @Settings.GetIntegerSetting("Container_Number_Format_Length_1");
+                var containerNumberFormatLength2 = @Settings.GetIntegerSetting("Container_Number_Format_Length_2");
+            }
+
+            <input type="text" id="ContainerNumber" name="ContainerNumber" size="45" required
+                   maxlength="@Settings.GetIntegerSetting("Container_Number_Length")"
+                   pattern="^[a-zA-Z0-9]{@containerNumberFormatLength1}-\d{@containerNumberFormatLength2}$">
+        </div>
+
+
 
         <label for="SealNumber">Seal Number:</label>
         <input type="text" id="SealNumber" name="SealNumber" required>
 
-        <label for="Type">Type:</label>
-        <input type="text" id="Type" name="Type" required>
 
-        <label for="MaxVolume">Max Volume:</label>
-        <input type="text" id="MaxVolume" name="MaxVolume">
+        <label for="TypeId">Container Type:</label>
+        <select id="TypeId" name="TypeId">
+            <option value="-1">None</option>
+            @foreach (int typeId in @Model.containerTypeMap.Keys)
+            {
+                var typeName = Model.containerTypeMap[typeId];
+                <option value="@typeId">@typeName</option>
+            }
+        </select>
+
+        <label for="DatePacked">Date Packed:</label>
+        <input type="date" id="DatePacked" name="DatePacked" required>
+
+        <label for="PackedBy">Packed By:</label>
+        <input type="text" id="PackedBy" name="PackedBy" required>
+
 
     </div>
 
-  
+    
 
-    <input type="submit" value="Create Container" asp-page-handler="SubmitButton" />
+    <input type="submit" value="Submit Container" asp-page-handler="SubmitButton" />
 </form>

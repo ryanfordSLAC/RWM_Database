@@ -69,7 +69,7 @@ namespace RWM_Database.Backend
 
         public static BurialData CreateBurialDataObject(MySqlDataReader read)
         {
-            int burialId = read.GetInt32("id");
+            int burialId = read.GetInt32("burial_id");
             string burialNumber = read.GetString("burial_number");
             string certificate = read.GetString("certificate");
 
@@ -103,7 +103,7 @@ namespace RWM_Database.Backend
                 MySqlConnection connection = MySQLHandler.GetMySQLConnection();
                 MySqlCommand command = connection.CreateCommand();
 
-                command.CommandText = "SELECT * FROM burial WHERE id = @BurialId";
+                command.CommandText = "SELECT * FROM burial WHERE burial_id = @BurialId";
                 command.Parameters.AddWithValue("@BurialId", burialId);
                 MySqlDataReader read = command.ExecuteReader();
                 if (read.HasRows)

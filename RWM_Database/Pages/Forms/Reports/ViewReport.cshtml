@@ -8,12 +8,58 @@
     @{
 
 
-        <header>Report </header>
-   
-        <div class="information-container" id="styled_item">
-            <label>Items Declared From @Model.StartDate to @Model.EndDate:</label>
-            <p>@Model.ItemReport.CountBetween("items", @Model.StartDate, @Model.EndDate)</p>
+        <header>Items Report</header>
+
+        <div class="table-container" id="styled_item">
+            <link rel="stylesheet" href="~/css/table.css">
+            <table id="styled_table">
+                <tr>
+                    <th>Declaration Number</th>
+                    <th>Length</th>
+                    <th>Width</th>
+                    <th>Height</th>
+                </tr>
+                @{
+                    var paginatedTable = Model.PaginatedTable;
+
+                    int start = (Model.CurrentPage - 1) * paginatedTable.PageSize;
+                    if (start < 0)
+                    {
+                        start = 0;
+                    }
+                    var itemList = Model.ItemsReport;
+
+                    for (int i = start; i < start + paginatedTable.PageSize; i++)
+                    {
+                        if (i >= itemList.Count)
+                        {
+                            break;
+                        }
+                        var item = itemList[i];
+
+                        <tr>
+                            <td><a href="/Forms/Items/PreviewWasteDeclarationForm?ItemId=@item.ItemId">@item.DeclarationNumber</a></td>
+                            <td>@item.Length ft</td>
+                            <td>@item.Width ft</td>
+                            <td>@item.Height ft</td>
+                        </tr>
+                    }
+                }
+
+            </table>
 
         </div>
     }
+</div>
+
+
+<div>
+    <ul class="pagination">
+        @for (var i = 1; i <= Model.PaginatedTable.TotalPages; i++)
+        {
+            <li class="page-item @(i == Model.CurrentPage ? "active" : "")">
+                <a href="/Forms/Reports/ViewReport?CurrentPage=@i&ReportType=@Model.ReportType&StartDate=@Model.StartDate&EndDate=@Model.EndDate" class="page-link">@i</a>
+            </li>
+        }
+    </ul>
 </div>

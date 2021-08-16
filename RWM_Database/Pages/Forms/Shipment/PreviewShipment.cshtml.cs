@@ -13,8 +13,8 @@ namespace RWM_Database.Pages.Forms.Shipment
     public class PreviewShipmentModel : PageModel
     {
 
-        [BindProperty(Name = "ShipmentNumber", SupportsGet = true)]
-        public string ShipmentNumber { get; set; }
+        [BindProperty(Name = "ShipmentId", SupportsGet = true)]
+        public int ShipmentId { get; set; }
 
         [BindProperty(Name = "CurrentPage", SupportsGet = true)]
         public int CurrentPage { get; set; }
@@ -25,13 +25,27 @@ namespace RWM_Database.Pages.Forms.Shipment
 
         public PaginatedTable PaginatedTable { get; set; }
 
+        public Dictionary<string, int> ContainersMap;
+
 
         public void OnGet()
         {
-            Console.WriteLine(ShipmentNumber);
-            Shipment = ShipmentHandler.LoadShipment(ShipmentNumber);
-            ShipmentContainers = new PackedContainerHandler(ShipmentNumber);
-            PaginatedTable = new PaginatedTable(10, ShipmentContainers.ContainerMap.Count);
+            Shipment = ShipmentHandler.LoadShipment(ShipmentId);
+            ShipmentContainers = new PackedContainerHandler(ShipmentId, -1);
+            ContainersMap = ContainerHandler.GetAllContainersMap();
+            PaginatedTable = new PaginatedTable(10, ShipmentContainers.PackedContainers.Count);
+        }
+
+        public IActionResult OnGetSubmitContainer(int containerId, int shipmentId) 
+        {
+            ContainerHandler.UpdateContainerShipment(containerId, shipmentId);
+            return RedirectToPage("PreviewShipment", new { ShipmentId = shipmentId });
+        }
+
+        public IActionResult OnGetRemoveContainer(int containerId, int shipmentId)
+        {
+            ContainerHandler.UpdateContainerShipment(containerId, -1);
+            return RedirectToPage("PreviewShipment", new { ShipmentId = shipmentId });
         }
     }
 }
