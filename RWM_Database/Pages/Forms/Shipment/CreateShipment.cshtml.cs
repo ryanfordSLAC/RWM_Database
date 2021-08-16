@@ -11,15 +11,18 @@ namespace RWM_Database.Pages.Forms.Shipment
 {
     public class CreateShipmentModel : PageModel
     {
+
+        public Dictionary<int, string> shipmentTypeMap;
+
         public void OnGet()
         {
-
+            shipmentTypeMap = ListTypeHandler.GetIdMap("shipment_type");
         }
 
         public IActionResult OnPostSubmitButton(IFormCollection data)
         {
             ShipmentHandler.CreateShipmentDBEntry(data);
-            return RedirectToPage("PreviewShipment", new { ShipmentNumber = data["ShipmentNumber"] });
+            return RedirectToPage("ShipmentDashboard");//add item success page
         }
     }
 }

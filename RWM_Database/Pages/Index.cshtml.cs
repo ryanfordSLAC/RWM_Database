@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Extensions.Logging;
 using RWM_Database.Backend.Reports;
@@ -25,7 +26,13 @@ namespace RWM_Database.Pages
         public void OnGet()
         {
             ItemReport = new ItemReport();
-            ContainerHandler = new PackedContainerHandler(null);
+            ContainerHandler = new PackedContainerHandler(-1, -1);
         }
+
+        public IActionResult OnPostViewButton(IFormCollection data)
+        {
+            return RedirectToPage("/Forms/Reports/ViewReport", new { ReportType = data["ReportType"], StartDate = data["StartDate"], EndDate = data["EndDate"] });
+        }
+
     }
 }

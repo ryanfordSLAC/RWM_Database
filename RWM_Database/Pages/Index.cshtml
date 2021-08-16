@@ -4,6 +4,35 @@
     ViewData["Title"] = "Dashboard";
 }
 
+
+<link rel="stylesheet" href="~/css/create_form.css">
+
+
+<form class="form" method="post" id="create_form">
+
+    <header>Generate Report</header>
+    <div class="information-container" id="styled_form">
+
+        <label for="ReportType">Report Type:</label>
+        <select id="ReportType" name="ReportType">
+            <option value="0">Items Shipped Between</option>
+            <option value="1">Items Hazardous</option>
+            <option value="2">Items Buried</option>
+            <option value="3">Incomplete Items</option>
+        </select>
+
+        <label for="StartDate">Start Date:</label>
+        <input type="date" id="StartDate" name="StartDate" required>
+
+        <label for="EndDate">End Date:</label>
+        <input type="date" id="EndDate" name="EndDate" required>
+
+    </div>
+
+    <input type="submit" value="Generate Report" asp-page-handler="ViewButton" />
+</form>
+
+
 <link rel="stylesheet" href="~/css/view_item.css">
 <div id="styled_item">
     @{

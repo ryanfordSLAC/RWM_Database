@@ -25,12 +25,29 @@ namespace RWM_Database.Pages.Forms.Burial
 
         public PaginatedTable PaginatedTable { get; set; }
 
+        public Dictionary<string, int> ShipmentMap;
+
 
         public void OnGet()
         {
             Burial = BurialHandler.LoadBurial(BurialId);
+            //check not null
             BuriedShipments = new BuriedShipmentHandler(BurialId);
+            ShipmentMap = ShipmentHandler.GetAllShipmentsMap();
+            Console.WriteLine("SDsd " + ShipmentMap.Count);
             PaginatedTable = new PaginatedTable(10, BuriedShipments.BuriedShipments.Count);
+        }
+
+        public IActionResult OnGetSubmitShipment(int shipmentId, int burialId)
+        {
+            ShipmentHandler.UpdateShipmentBurial(shipmentId, burialId);
+            return RedirectToPage("PreviewBurial", new { BurialId = burialId });
+        }
+
+        public IActionResult OnGetRemoveShipment(int shipmentId, int burialId)
+        {
+            ShipmentHandler.UpdateShipmentBurial(shipmentId, -1);
+            return RedirectToPage("PreviewBurial", new { BurialId = burialId });
         }
     }
 }

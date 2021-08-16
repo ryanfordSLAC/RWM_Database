@@ -4,16 +4,114 @@
     ViewData["Title"] = "ViewContainer";
 }
 
-<h1>View Container</h1>
-
-@{
-    var data = Model.Form;
-    var containerNumber = data.ContainerNumber;
-    var sealNumber = data.SealNumber;
-    var type = data.Type;
-    <b>Container Number: </b>@Html.DisplayFor(m => containerNumber)
-    <br />
-    <b>Seal Number: </b>@Html.DisplayFor(m => sealNumber)
-    <br />
-    <b>Type: </b>@Html.DisplayFor(m => type)
+@section scripts
+{
+    <script src="@Url.Content("~/js/drop_menu.js")"></script>
 }
+
+
+<link rel="stylesheet" href="~/css/view_item.css">
+<div id="styled_item">
+    @{
+        var ContainerData = Model.ContainerData;
+
+        <header>Container Information </header>
+
+        <div class="information-container" id="styled_item">
+            <label>Container Number:</label>
+            <p>@ContainerData.ContainerNumber</p>
+
+            <label>Seal Number:</label>
+            <p>@ContainerData.SealNumber</p>
+
+            <label>Type:</label>
+            <p>@ContainerData.TypeName</p>
+
+        </div>
+
+        <header>Creation Details </header>
+
+        <div class="information-container" id="styled_item">
+
+            <label>Packed By:</label>
+            <p>@ContainerData.PackedBy</p>
+
+            <label>Date Packed:</label>
+            <p>@ContainerData.DatePacked</p>
+
+        </div>
+
+        <header>Items Included</header>
+
+        <div class="table-container" id="styled_item">
+            <link rel="stylesheet" href="~/css/table.css">
+            <table id="styled_table">
+                <tr>
+                    <th>Declaration Number</th>
+                    <th>Length</th>
+                    <th>Width</th>
+                    <th>Height</th>
+                </tr>
+                @{
+                    var paginatedTable = Model.PaginatedTable;
+
+                    int start = (Model.CurrentPage - 1) * paginatedTable.PageSize;
+                    if (start < 0)
+                    {
+                        start = 0;
+                    }
+                    var itemList = Model.PackedContainerHandler.PackedWasteForms;
+
+                    for (int i = start; i < start + paginatedTable.PageSize; i++)
+                    {
+                        if (i >= itemList.Count)
+                        {
+                            break;
+                        }
+                        var item = itemList[i];
+
+                        <tr>
+                            <td><a href="/Forms/Items/PreviewWasteDeclarationForm?ItemId=@item.ItemId">@item.DeclarationNumber</a></td>
+                            <td>@item.Length ft</td>
+                            <td>@item.Width ft</td>
+                            <td>@item.Height ft</td>
+                        </tr>
+                    }
+                }
+
+            </table>
+
+        </div>
+
+    }
+
+</div>
+
+
+<link rel="stylesheet" href="~/css/drop_down.css">
+<div class="dropdown">
+    <button onclick="myFunction('myDropdown1')" class="dropbtn">Add Item</button>
+    <div id="myDropdown1" class="dropdown-content">
+        <input type="text" placeholder="Search.." id="myInput1" onkeyup="filterFunction('myDropdown1', 'myInput1')">
+        @{
+            foreach (string itemNumber in Model.ItemMap.Keys)
+            {
+                <a asp-page-handler="SubmitItem" asp-route-itemId="@Model.ItemMap[itemNumber]" asp-route-containerId="@Model.ContainerId">@itemNumber</a>
+            }
+        }
+    </div>
+</div>
+
+<link rel="stylesheet" href="~/css/drop_down.css">
+<div class="dropdown">
+    <button onclick="myFunction('myDropdown2')" class="dropbtn" style="background-color: #db144c">Remove Item</button>
+    <div id="myDropdown2" class="dropdown-content">
+        <input type="text" placeholder="Search.." id="myInput2" onkeyup="filterFunction('myDropdown2', 'myInput2')">
+        @{
+            foreach (var packedItem in Model.PackedContainerHandler.PackedWasteForms)
+            {
+                <a asp-page-handler="RemoveItem" asp-route-itemId="@packedItem.ItemId" asp-route-containerId="@packedItem.ContainerId">@packedItem.DeclarationNumber</a>
+            }
+        }
+    </div>
+</div>

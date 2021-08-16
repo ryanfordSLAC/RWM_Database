@@ -1,0 +1,100 @@
+﻿@page
+@model RWM_Database.Pages.Forms.Container.ContainerDashboardModel
+@{
+    ViewData["Title"] = "ShipmentDashboard";
+}
+
+<link rel="stylesheet" href="~/css/create_form.css">
+<form class="form" method="post" id="create_form">
+
+    <header>Search By Field</header>
+    <div class="information-container" id="styled_form">
+
+        <label for="SearchContainerNumber">Container Number:</label>
+        <input type="text" id="SearchContainerNumber" name="SearchContainerNumber" />
+
+        <label for="SearchShipmentNumber">Shipment Number:</label>
+        <input type="text" id="SearchShipmentNumber" name="SearchShipmentNumber" />
+
+    </div>
+
+    <input type="submit" value="Search" asp-page-handler="SearchButton" />
+
+    <input type="submit" value="Clear" asp-page-handler="ClearButton" />
+</form>
+
+
+<b>Containers Found: @Model.ContainerHandler.ContainerList.Count</b>
+
+<link rel="stylesheet" href="~/css/table.css">
+<table id="styled_table">
+    <tr>
+        <th>Container Number</th>
+        <th>Shipment Number</th>
+        <th>Seal Number</th>
+        <th>Type</th>
+        <th>Date Packed</th>
+        <th>Packed By</th>
+    </tr>
+    @{
+        var search = Model.ContainerHandler.Search;
+        var paginatedTable = Model.PaginatedTable;
+
+        int start = (Model.CurrentPage - 1) * paginatedTable.PageSize;
+        if (start < 0)
+        {
+            start = 0;
+        }
+        for (int i = start; i < start + paginatedTable.PageSize; i++)
+        {
+            if (i >= Model.ContainerHandler.ContainerList.Count)
+            {
+                break;
+            }
+            var element = Model.ContainerHandler.ContainerList[i];
+        <tr>
+            @{
+                if (element.ContainerId != -1)
+                {
+                    <td><a href="/Forms/Container/ViewContainer?ContainerId=@element.ContainerId">@element.ContainerNumber</a></td>
+                }
+                else
+                {
+                    <td>@element.ContainerNumber</td>
+                }
+
+                if (element.ShipmentId != -1)
+                {
+                    <td><a href="/Forms/Shipment/PreviewShipment?ShipmentId=@element.ShipmentId">@element.ShipmentName</a></td>
+                }
+                else
+                {
+                    <td>@element.ShipmentName</td>
+                }
+            }
+            <td>@element.SealNumber</td>
+            <td>@element.TypeName</td>
+            <td>@element.DatePacked</td>
+            <td>@element.PackedBy</td>
+        </tr>
+        }
+    }
+
+</table>
+
+<div>
+    <ul class="pagination">
+        @for (var i = 1; i <= paginatedTable.TotalPages; i++)
+        {
+            <li class="page-item @(i == Model.CurrentPage ? "active" : "")">
+                <a href="/Forms/Container/ContainerDashboard?CurrentPage=@i@search.GetURLSearch()" class="page-link">@i</a>
+            </li>
+        }
+    </ul>
+</div>
+
+
+<link rel="stylesheet" href="~/css/create_form.css">
+<form class="form" method="post" id="create_form">
+    <input type="submit" value="Create Container" asp-page-handler="CreateButton" />
+</form>

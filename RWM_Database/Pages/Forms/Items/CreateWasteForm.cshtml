@@ -12,7 +12,7 @@
 
 <link rel="stylesheet" href="~/css/create_form.css">
 
-<b id="create_form">Radioactive Material Declaration Form</b>
+<b style="font-size: 26px">Radioactive Material Declaration Form</b>
 
 
 
@@ -20,38 +20,79 @@
 
     <header>Item Information</header>
     <div class="information-container" id="styled_form">
+
         <label for="DeclarationNumber">Declaration Number:</label>
-        <input type="text" id="DeclarationNumber" name="DeclarationNumber" required>
+
+        <div data-tip="@Settings.GetStringSetting("Item_Declaration_Number_Tip")">
+
+            @{
+                var itemDeclarationNumberFormatLength1 = @Settings.GetIntegerSetting("Item_Declaration_Number_Format_Length_1");
+                var itemDeclarationNumberFormatLength2 = @Settings.GetIntegerSetting("Item_Declaration_Number_Format_Length_2");
+            }
+
+            <input type="text" id="DeclarationNumber" name="DeclarationNumber" size="45" required
+                   maxlength="@Settings.GetIntegerSetting("Item_Declaration_Number_Length")"
+                   pattern="^\d{@itemDeclarationNumberFormatLength1}-\d{@itemDeclarationNumberFormatLength2}$">
+        </div>
 
 
-        <label for="ItemDescription">Item Description:</label> 
-        <input type="text" id="ItemDescription" name="ItemDescription" required>
+
+        <label for="ItemDescription">Item Description:</label>
+
+        <div data-tip="@Settings.GetStringSetting("Item_Description_Tip")">
+            <input type="text" id="ItemDescription" name="ItemDescription" size="45" required maxlength="300">
+        </div>
+
 
         <label for="Location">Location:</label>
-        <input type="text" id="Location" name="Location" required>
+
+        <div data-tip="@Settings.GetStringSetting("Item_Location_Tip")">
+            <input type="text" id="Location" name="Location" size="45" required maxlength="45">
+        </div>
+
+
 
         <label for="AccountNumber">Account Number:</label>
-        <input type="text" id="AccountNumber" name="AccountNumber" required>
+
+        <div data-tip="@Settings.GetStringSetting("Item_Account_Number_Tip")">
+            @{
+                var accountFormatLength1 = @Settings.GetIntegerSetting("Item_Account_Number_Format_Length_1");
+                var accountFormatLength2 = @Settings.GetIntegerSetting("Item_Account_Number_Format_Length_2");
+            }
+            <input type="text" id="AccountNumber" name="AccountNumber" size="45" required
+                   maxlength="@Settings.GetIntegerSetting("Item_Account_Number_Length")"
+                   pattern="^\d{@accountFormatLength1}-[a-zA-Z0-9]{@accountFormatLength2}$">
+        </div>
+
+
 
         <label for="HazardousMaterial">Hazardous Material:</label>
         <select id="HazardousMaterial" name="HazardousMaterial">
-            <option value="1">Yes</option>
             <option value="0">No</option>
+            <option value="1">Yes</option>
         </select>
 
 
         <label for="GeneratorName">Generator Name:</label>
-        <input type="text" id="GeneratorName" name="GeneratorName" required>
+
+        <div data-tip="@Settings.GetStringSetting("Item_Generator_Tip")">
+            <input type="text" id="GeneratorName" name="GeneratorName" size="45" required maxlength="45">
+        </div>
+
 
         <label for="GenerationDate">Generation Date:</label>
-        <input type="date" id="GenerationDate" name="GenerationDate" required>
+        <input type="date" id="GenerationDate" name="GenerationDate" size="45" required>
 
-
+ 
         <label for="RecievedBy">Recieved By:</label>
-        <input type="text" id="RecievedBy" name="RecievedBy" required>
+        <div data-tip="@Settings.GetStringSetting("Item_Recieved_By_Tip")">
+            <input type="text" id="RecievedBy" name="RecievedBy" size="45" required maxlength="45">
+        </div>
+
+        
 
         <label for="RecievedDate">Recieved Date:</label>
-        <input type="date" id="RecievedDate" name="RecievedDate" required>
+        <input type="date" id="RecievedDate" name="RecievedDate" size="45" required>
 
     </div>
 
@@ -60,7 +101,7 @@
 
         <label for="ContainerNumber">Select Container:</label>
 
-        @foreach (var container in @Model.ContainerHandler.ContainerMap.Keys)
+        @foreach (int container in @Model.ContainerHandler.PackedContainers.Keys)
         {
             var usedVolume = @Model.ContainerHandler.GetUsedVolume(container);
             var totalVolume = @Model.ContainerHandler.GetTotalVolume(container);
@@ -68,22 +109,30 @@
             <input type="hidden" id="hidden_total_@container" name="containerValue" value="@totalVolume">
         }
 
-        <select id="ContainerNumber" name="ContainerNumber" onchange="calcAddedVolume()">
-            @foreach (var container in @Model.ContainerHandler.ContainerMap.Keys)
+        <select id="ContainerId" name="ContainerId" onchange="calcAddedVolume()">
+            @foreach (int container in @Model.ContainerHandler.PackedContainers.Keys)
             {
                 var usedVolume = @Model.ContainerHandler.GetPercentUsedVolume(container);
-                <option value="@container">@container &emsp; @usedVolume% capacity</option>
+                var containerNumber = Model.ContainerHandler.PackedContainers[container].ContainerNumber;
+                <option value="@container">@containerNumber &emsp; @usedVolume% capacity</option>
             }
         </select>
 
         <label for="Length">Item Length:</label>
-        <input type="text" id="Length" name="Length" onkeyup="volume()" required>
+        <div data-tip="@Settings.GetStringSetting("Item_Length_Tip")">
+            <input type="number" id="Length" name="Length" onkeyup="volume()" size="45" required>
+        </div>
 
         <label for="Width">Item Width:</label>
-        <input type="text" id="Width" name="Width" onkeyup="volume()" required>
+        <div data-tip="@Settings.GetStringSetting("Item_Width_Tip")">
+            <input type="number" id="Width" name="Width" onkeyup="volume()" size="45" required>
+        </div>
 
         <label for="Height">Item Height:</label>
-        <input type="text" id="Height" name="Height" onkeyup="volume()" required>
+        <div data-tip="@Settings.GetStringSetting("Item_Height_Tip")">
+            <input type="number" id="Height" name="Height" onkeyup="volume()" size="45" required>
+        </div>
+
 
     </div>
 
@@ -92,15 +141,15 @@
 
         <label>Item Volume:</label>
         <p id="Volume"></p>
-        <p>inches cubed</p>
+        <p>ft&sup3</p>
 
         <label>Container Volume Before Adding Item:</label>
         <p id="PreviousVolume"></p>
-        <p>inches cubed</p>
+        <p>ft&sup3</p>
 
         <label>Container Volume After Adding Item:</label>
         <p id="PostVolume"></p>
-        <p>inches cubed</p>
+        <p>ft&sup3</p>
 
         <label>Volume Filled:</label>
         <p id="PercentFilled"></p>

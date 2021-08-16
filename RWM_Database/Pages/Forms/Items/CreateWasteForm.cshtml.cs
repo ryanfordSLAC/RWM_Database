@@ -18,13 +18,17 @@ namespace RWM_Database.Pages.Forms
 
         public void OnGet()
         {
-            ContainerHandler = new PackedContainerHandler(null);
+            ContainerHandler = new PackedContainerHandler(-1, -1);
         }
 
         public IActionResult OnPostSubmitButton(IFormCollection data)
         {
+            if (!data.ContainsKey("ContainerId"))
+            {
+                return RedirectToPage("/Error", new { CustomError = ("Invalid container provided") });
+            }
             this.CreateWasteDeclarationItem(data);
-            return RedirectToPage("PreviewWasteDeclarationForm", new { DeclarationNumber = data["DeclarationNumber"] });
+            return RedirectToPage("WasteDeclarationForm"); //item created success page
         }
 
 
@@ -39,10 +43,16 @@ namespace RWM_Database.Pages.Forms
         {
             try
             {
+                int containerId = -1;
+                if (data.ContainsKey("ContainerId"))
+                {
+                    containerId = Convert.ToInt32(data["ContainerId"]);
+                }
+
                 MySqlCommand command = MySQLHandler.GetMySQLConnection().CreateCommand();
-                command.CommandText = ("INSERT INTO items VALUES(0, @DeclarationNumber, @ContainerNumber, @ItemDescription, @Location, @AccountNumber, @HazardousMaterial, @GeneratorName, @GenerationDate, @RecievedBy, @RecievedDate, @Length, @Width, @Height)");
+                command.CommandText = ("INSERT INTO items VALUES(0, @DeclarationNumber, @ContainerId, @ItemDescription, @Location, @AccountNumber, @HazardousMaterial, @GeneratorName, @GenerationDate, @RecievedBy, @RecievedDate, @Length, @Width, @Height, @UserID)");
                 command.Parameters.AddWithValue("@DeclarationNumber", data["DeclarationNumber"]);
-                command.Parameters.AddWithValue("@ContainerNumber", data["ContainerNumber"]);
+                command.Parameters.AddWithValue("@ContainerId", containerId);
                 command.Parameters.AddWithValue("@ItemDescription", data["ItemDescription"]);
                 command.Parameters.AddWithValue("@Location", data["Location"]);
                 command.Parameters.AddWithValue("@AccountNumber", data["AccountNumber"]);
@@ -54,6 +64,7 @@ namespace RWM_Database.Pages.Forms
                 command.Parameters.AddWithValue("@Length", (float)Convert.ToDouble(data["Length"]));
                 command.Parameters.AddWithValue("@Width", (float)Convert.ToDouble(data["Width"]));
                 command.Parameters.AddWithValue("@Height", (float)Convert.ToDouble(data["Height"]));
+                command.Parameters.AddWithValue("@UserID", -1);
                 Console.WriteLine(command.CommandText);
                 command.ExecuteReader();
             }

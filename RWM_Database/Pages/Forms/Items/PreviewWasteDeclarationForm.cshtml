@@ -54,16 +54,17 @@
             <p>@hazardousMaterial</p>
 
             <label>Length:</label>
-            <p>@length</p>
+            <p>@length ft</p>
+            
 
             <label>Width:</label>
-            <p>@width</p>
+            <p>@width ft</p>
 
             <label>Height:</label>
-            <p>@height</p>
+            <p>@height ft</p>
 
             <label>Calculated Volume:</label>
-            <p>@volume</p>
+            <p>@volume ft&sup3</p>
 
         </div>
 
@@ -96,16 +97,42 @@
                     <th>Submitted By</th>
                 </tr>
 
-                @foreach (var attachment in Model.AttachmentList)
-                {
-                    <tr>
-                        <td><a href="/Attachment/ViewAttachment?FileName=@attachment.GetAttachmentName()" id="fileName">@attachment.GetAttachmentName()</a></td>
-                        <td>@attachment.GetAttachmentDate()</td>
-                        <td>@attachment.GetAttachmentCreator()</td>
-                    </tr>
+                @{
+                    var paginatedTable = Model.PaginatedTable;
+
+                    int start = (Model.CurrentPage - 1) * paginatedTable.PageSize;
+                    if (start < 0)
+                    {
+                        start = 0;
+                    }
+                    for (int i = start; i < start + paginatedTable.PageSize; i++)
+                    {
+                        if (i >= Model.AttachmentList.Count)
+                        {
+                            break;
+                        }
+                        var attachment = Model.AttachmentList[i];
+                        <tr>
+                            <td><a href="/Attachment/ViewAttachment?FileId=@attachment.GetAttachmentId()" id="fileName">@attachment.GetAttachmentName()</a></td>
+                            <td>@attachment.GetAttachmentDate()</td>
+                            <td>@attachment.GetAttachmentCreator()</td>
+                        </tr>
+                    }
                 }
 
             </table>
+
+            <div>
+                <ul class="pagination">
+                    @for (var i = 1; i <= @Model.PaginatedTable.TotalPages; i++)
+                    {
+                        <li class="page-item @(i == Model.CurrentPage ? "active" : "")">
+                            <a href="/Forms/Items/PreviewWasteDeclarationForm?CurrentPage=@i&ItemId=@Model.ItemId" class="page-link">@i</a>
+                        </li>
+                    }
+                </ul>
+            </div>
+
 
             <link rel="stylesheet" href="~/css/upload_button.css">
 

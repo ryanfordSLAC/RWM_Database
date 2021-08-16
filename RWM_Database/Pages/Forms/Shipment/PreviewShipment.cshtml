@@ -4,6 +4,11 @@
     ViewData["Title"] = "PreviewShipment";
 }
 
+@section scripts
+{
+    <script src="@Url.Content("~/js/drop_menu.js")"></script>
+}
+
 <link rel="stylesheet" href="~/css/view_item.css">
 <div id="styled_item">
     @{
@@ -17,7 +22,7 @@
             <p>@shipmentData.ShipmentNumber</p>
 
             <label>Shipment Type:</label>
-            <p>@shipmentData.ShipmentType</p>
+            <p>@shipmentData.ShipmentTypeName</p>
 
             <label>Conveyance:</label>
             <p>@shipmentData.ShipmentConveyance</p>
@@ -43,7 +48,7 @@
                     {
                         start = 0;
                     }
-                    var containerList = Model.ShipmentContainers.ContainerMap.Keys.ToList<string>();
+                    var containerList = Model.ShipmentContainers.PackedContainers.Keys.ToList<int>();
 
                     for (int i = start; i < start + paginatedTable.PageSize; i++)
                     {
@@ -52,12 +57,14 @@
                             break;
                         }
                         var container = containerList[i];
+                        var containerNumber = Model.ShipmentContainers.PackedContainers[container].ContainerNumber;
                         var volumedUsed = Model.ShipmentContainers.GetUsedVolume(container);
                         var totalVolume = Model.ShipmentContainers.GetTotalVolume(container);
                         var percentFilled = Model.ShipmentContainers.GetPercentUsedVolume(container);
 
+
                         <tr>
-                            <td><a href="/Forms/Container/ViewContainer?ContainerNumber=@container">@container</a></td>
+                            <td><a href="/Forms/Container/ViewContainer?ContainerId=@container">@containerNumber</a></td>
                             <td>@volumedUsed ft cubed</td>
                             <td>@totalVolume ft cubed</td>
                             <td>@percentFilled %</td>
@@ -72,17 +79,30 @@
 
 </div>
 
-
-<link rel="stylesheet" href="~/css/create_form.css">
-<form class="form" method="post" id="create_form">
-
-    <header>Add Container To Shipment</header>
-    <div class="information-container" id="styled_form">
-
-        <label for="ContainerNumber">Container Number:</label>
-        <input type="text" id="ContainerNumber" name="ContainerNumber" />
+<link rel="stylesheet" href="~/css/drop_down.css">
+<div class="dropdown">
+    <button onclick="myFunction('myDropdown1')" class="dropbtn">Add Container</button>
+    <div id="myDropdown1" class="dropdown-content">
+        <input type="text" placeholder="Search.." id="myInput1" onkeyup="filterFunction('myDropdown1', 'myInput1')">
+        @{
+            foreach (string containerNumber in Model.ContainersMap.Keys)
+            {
+                <a asp-page-handler="SubmitContainer" asp-route-containerId="@Model.ContainersMap[containerNumber]" asp-route-shipmentId="@Model.ShipmentId">@containerNumber</a>
+            }
+        }
     </div>
+</div>
 
-    <input type="submit" value="Add Container" asp-page-handler="AddContainerButton" />
-
-</form>
+<link rel="stylesheet" href="~/css/drop_down.css">
+<div class="dropdown">
+    <button onclick="myFunction('myDropdown2')" class="dropbtn" style="background-color: #db144c">Remove Container</button>
+    <div id="myDropdown2" class="dropdown-content">
+        <input type="text" placeholder="Search.." id="myInput2" onkeyup="filterFunction('myDropdown2', 'myInput2')">
+        @{
+            foreach (int containerId in Model.ShipmentContainers.PackedContainers.Keys)
+            {
+                <a asp-page-handler="RemoveContainer" asp-route-containerId="@containerId" asp-route-shipmentId="@Model.ShipmentId">@Model.ShipmentContainers.PackedContainers[containerId].ContainerNumber</a>
+            }
+        }
+    </div>
+</div>

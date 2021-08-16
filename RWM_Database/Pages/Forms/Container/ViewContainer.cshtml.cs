@@ -5,73 +5,68 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using MySql.Data.MySqlClient;
+using RWM_Database.Backend;
+using RWM_Database.Utility;
+using static RWM_Database.Backend.ContainerHandler;
 
 namespace RWM_Database.Pages.Forms
 {
 
     /* 
     * Displays information about a container 
-    * to the user from a given container number
+    * to the user from a given container id
     * Author: James Meadows
     */
 
     public class ViewContainerModel : PageModel
     {
-        [BindProperty(Name = "ContainerNumber", SupportsGet = true)]
-        public string ContainerNumber { get; set; }
+        [BindProperty(Name = "ContainerId", SupportsGet = true)]
+        public int ContainerId{ get; set; }
 
-        public ContainerData Form { get; set; }
+        [BindProperty(Name = "CurrentPage", SupportsGet = true)]
+        public int CurrentPage { get; set; }
 
-        public class ContainerData
+        public ContainerData ContainerData { get; set; }
+
+        public Dictionary<string, int> ItemMap;
+
+        public PackedContainerHandler PackedContainerHandler { get; set; }
+
+        public PaginatedTable PaginatedTable { get; set; }
+
+        public IActionResult OnGet()
         {
-
-            public string ContainerNumber { get; set; }
-            public string SealNumber { get; set; }
-            public string Type { get; set; }
-
-            public ContainerData(string containerNumber, string sealNumber, string type)
+            ContainerData = ContainerHandler.LoadContainerData(ContainerId);
+            if (ContainerData == null)
             {
-                this.ContainerNumber = containerNumber;
-                this.SealNumber = sealNumber;
-                this.Type = type;
+                return RedirectToPage("/Error", new { CustomError = ("Container not found. container id given: " + ContainerId)});
             }
-        }
+            PackedContainerHandler = new PackedContainerHandler(-1, ContainerId);
 
-        public void OnGet()
-        {
-            Form = LoadContainerData(ContainerNumber);
-        }
-
-        private ContainerData LoadContainerData(string containerNumber)
-        {
-            ContainerData data = null;
-            try
+            if (PackedContainerHandler == null)
             {
-                MySqlConnection connection = MySQLHandler.GetMySQLConnection();
-                MySqlCommand command = connection.CreateCommand();
-                command.CommandText = "SELECT * FROM container WHERE container_number = @ContainerNumber";
-                command.Parameters.AddWithValue("@ContainerNumber", containerNumber);
-
-                MySqlDataReader read = command.ExecuteReader();
-
-                if (read.HasRows)
-                {
-                    while (read.Read())
-                    {
-                        string sealNumber = read.GetString(2);
-                        string type = read.GetString(3);
-                        data = new ContainerData(containerNumber, sealNumber, type);
-                    }
-                }
-                connection.Close();
-            }
-            catch (MySqlException ex)
-            {
-                Console.WriteLine(ex.Message.ToString());
+                return RedirectToPage("/Error", new { CustomError = ("Container Items not found. container id given: " + ContainerId) });
             }
 
-            return data;
+            ItemMap = ItemHandler.GetAllItemsMap();
+
+            PaginatedTable = new PaginatedTable(10, PackedContainerHandler.PackedWasteForms.Count);
+
+            return Page();
         }
+
+        public IActionResult OnGetSubmitItem(int itemId, int containerId)
+        {
+            ItemHandler.UpdateItemContainer(itemId, containerId);
+            return RedirectToPage("ViewContainer", new { ContainerId = containerId });
+        }
+
+        public IActionResult OnGetRemoveItem(int itemId, int containerId)
+        {
+            ItemHandler.UpdateItemContainer(itemId, -1);
+            return RedirectToPage("ViewContainer", new { ContainerId = containerId });
+        }
+
     }
 
 }

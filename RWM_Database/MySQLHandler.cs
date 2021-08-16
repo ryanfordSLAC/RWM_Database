@@ -4,6 +4,7 @@ using RWM_Database.Utility;
 using System;
 using System.Collections.Generic;
 using System.Configuration;
+using System.Data;
 using System.IO;
 using System.Linq;
 using System.Reflection;
@@ -89,5 +90,47 @@ namespace RWM_Database
             }
             return sql;
         }
+
+        public static bool ColumnExists(IDataReader reader, string columnName)
+        {
+            for (int i = 0; i < reader.FieldCount; i++)
+            {
+                if (reader.GetName(i).Equals(columnName))
+                {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+
+        public static void ReadFromDatabase(Action<MySqlCommand> onCreate, Action<MySqlDataReader> onRead)
+        {
+            try
+            {
+                MySqlConnection connection = MySQLHandler.GetMySQLConnection();
+                MySqlCommand command = connection.CreateCommand();
+                onCreate(command);
+
+
+                MySqlDataReader read = command.ExecuteReader();
+
+                if (read.HasRows)
+                {
+                    while (read.Read())
+                    {
+                        onRead(read);
+                    }
+                }
+                connection.Close();
+            }
+            catch (MySqlException ex)
+            {
+                Console.WriteLine(ex.Message.ToString());
+            }
+        }
+
     }
+
 }

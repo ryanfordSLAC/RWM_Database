@@ -52,8 +52,8 @@
             }
             var element = Model.ShipmentHandler.ShipmentList[i];
             <tr>
-                <td><a href="/Forms/Shipment/PreviewShipment?ShipmentNumber=@element.ShipmentNumber">@element.ShipmentNumber</a></td>
-                <td>@element.ShipmentType</td>
+                <td><a href="/Forms/Shipment/PreviewShipment?ShipmentId=@element.ShipmentId">@element.ShipmentNumber</a></td>
+                <td>@element.ShipmentTypeName</td>
                 <td>@element.ShipmentConveyance</td>
             </tr>
         }

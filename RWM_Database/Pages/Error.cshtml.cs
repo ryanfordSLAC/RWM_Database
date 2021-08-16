@@ -14,6 +14,9 @@ namespace RWM_Database.Pages
     {
         public string RequestId { get; set; }
 
+        [BindProperty(Name = "CustomError", SupportsGet = true)]
+        public string CustomError { get; set; }
+
         public bool ShowRequestId => !string.IsNullOrEmpty(RequestId);
 
         private readonly ILogger<ErrorModel> _logger;

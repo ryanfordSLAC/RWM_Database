@@ -25,7 +25,7 @@
 
 <br />
 
-<b>Waste Declaration Forms Found: @Model.ItemHandler.ItemList.Count</b>
+<b>Items Found: @Model.ItemHandler.ItemList.Count</b>
 
 <link rel="stylesheet" href="~/css/table.css">
 <table id="styled_table">
@@ -51,15 +51,18 @@
             }
             var element = Model.ItemHandler.ItemList[i];
 
+            var itemId = element.ItemId;
             var declarationNumber = element.DeclarationNumber;
             var containerNumber = element.ContainerNumber;
+            var containerId = element.ContainerId;
+
             var description = element.ItemDescription;
             var location = element.Location;
             var hazardousMaterial = element.HarzardousMaterial ? "Yes" : "No";
 
             <tr>
-                <td><a href="/Forms/Items/PreviewWasteDeclarationForm?DeclarationNumber=@declarationNumber">@Html.DisplayFor(m => declarationNumber)</a></td>
-                <td><a href="/Forms/Container/ViewContainer?ContainerNumber=@containerNumber">@Html.DisplayFor(m => containerNumber)</a></td>
+                <td><a href="/Forms/Items/PreviewWasteDeclarationForm?ItemId=@itemId">@Html.DisplayFor(m => declarationNumber)</a></td>
+                <td><a href="/Forms/Container/ViewContainer?ContainerId=@containerId">@Html.DisplayFor(m => containerNumber)</a></td>
                 <td>@Html.DisplayFor(m => description)</td>
                 <td>@Html.DisplayFor(m => location)</td>
                 <td>@hazardousMaterial</td>
@@ -84,7 +87,7 @@
 
 <link rel="stylesheet" href="~/css/create_form.css">
 <form class="form" method="post" id="create_form">
-    <input type="submit" value="Create Waste Form" asp-page-handler="CreateButton" />
+    <input type="submit" value="Create Item" asp-page-handler="CreateButton" />
 </form>
 
 

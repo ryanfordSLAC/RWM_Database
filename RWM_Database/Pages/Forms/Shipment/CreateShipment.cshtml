@@ -5,7 +5,7 @@
 
 <link rel="stylesheet" href="~/css/create_form.css">
 
-<b id="create_form">Shipment Declaration Form</b>
+<b style="font-size: 26px">Shipment Declaration Form</b>
 
 
 
@@ -16,14 +16,18 @@
         <label for="ShipmentNumber">Shipment Number:</label>
         <input type="text" id="ShipmentNumber" name="ShipmentNumber" required>
 
-        <label for="ShipmentType">Shipment Type:</label>
-        <input type="text" id="ShipmentType" name="ShipmentType" required>
+        <label for="ShipmentTypeId">Shipment Type:</label>
+        <select id="ShipmentTypeId" name="ShipmentTypeId">
+            <option value="-1">None</option>
+            @foreach (int typeId in @Model.shipmentTypeMap.Keys)
+            {
+                var typeName = Model.shipmentTypeMap[typeId];
+                <option value="@typeId">@typeName</option>
+            }
+        </select>
 
         <label for="ShipmentConveyance">Conveyance:</label>
         <input type="text" id="ShipmentConveyance" name="ShipmentConveyance" required>
-
-        <label for="BurialId">Burial Id:</label>
-        <input type="text" id="BurialId" name="BurialId" required>
 
         <label for="DateShipped">Date Shipped:</label>
         <input type="date" id="DateShipped" name="DateShipped" required>
@@ -32,13 +36,6 @@
         <input type="date" id="DateShipped" name="DateRecieved" required>
 
     </div>
-
-    <header>Specifications</header>
-    <div class="information-container" id="styled_form">
-
-    </div>
-
-
 
 
     <input type="submit" value="Submit Shipment" asp-page-handler="SubmitButton" />

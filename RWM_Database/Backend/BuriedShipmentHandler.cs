@@ -25,10 +25,10 @@ namespace RWM_Database.Backend
             {
                 MySqlConnection connection = MySQLHandler.GetMySQLConnection();
                 MySqlCommand command = connection.CreateCommand();
-                command.CommandText = "SELECT * FROM burial LEFT JOIN shipment ON shipment.burial_id = burial.id";
+                command.CommandText = "SELECT * FROM burial LEFT JOIN shipment ON shipment.burial_ref = burial.burial_id";
                 if (burialId != -1)
                 {
-                    command.CommandText += " WHERE burial.id = @BurialId";
+                    command.CommandText += " WHERE burial.burial_id = @BurialId";
                     command.Parameters.AddWithValue("@BurialId", burialId);
                 }
 
@@ -38,10 +38,14 @@ namespace RWM_Database.Backend
                 {
                     while (read.Read())
                     {
-                        if (!read.IsDBNull(read.GetOrdinal("shipment_number")))
+
+                        if (MySQLHandler.ColumnExists(read, "shipment_number"))
                         {
-                            ShipmentData buriedShipment = ShipmentHandler.CreateShipmentDataObject(read);
-                            BuriedShipments.Add(buriedShipment);
+                            if (!read.IsDBNull(read.GetOrdinal("shipment_number")))
+                            {
+                                ShipmentData buriedShipment = ShipmentHandler.CreateShipmentDataObject(read);
+                                BuriedShipments.Add(buriedShipment);
+                            }
                         }
                     }
                 }

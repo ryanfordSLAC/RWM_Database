@@ -4,6 +4,12 @@
     ViewData["Title"] = "PreviewBurial";
 }
 
+@section scripts
+{
+    <script src="@Url.Content("~/js/drop_menu.js")"></script>
+}
+
+
 <link rel="stylesheet" href="~/css/view_item.css">
 <div id="styled_item">
     @{
@@ -50,8 +56,8 @@
                         var shipment = shipmentList[i];
 
                         <tr>
-                            <td><a href="/Forms/Shipment/PreviewShipment?ShipmentNumber=@shipment.ShipmentNumber">@shipment.ShipmentNumber</a></td>
-                            <td>@shipment.ShipmentType</td>
+                            <td><a href="/Forms/Shipment/PreviewShipment?ShipmentId=@shipment.ShipmentId">@shipment.ShipmentNumber</a></td>
+                            <td>@shipment.ShipmentTypeName</td>
                             <td>@shipment.ShipmentConveyance</td>
                         </tr>
                     }
@@ -72,17 +78,31 @@
     </ul>
 </div>
 
-
-<link rel="stylesheet" href="~/css/create_form.css">
-<form class="form" method="post" id="create_form">
-
-    <header>Add Shipment To Burial</header>
-    <div class="information-container" id="styled_form">
-
-        <label for="ShipmentNumber">Shipment Number:</label>
-        <input type="text" id="ShipmentNumber" name="ShipmentNumber" />
+<link rel="stylesheet" href="~/css/drop_down.css">
+<div class="dropdown">
+    <button onclick="myFunction('myDropdown1')" class="dropbtn">Add Shipment</button>
+    <div id="myDropdown1" class="dropdown-content">
+        <input type="text" placeholder="Search.." id="myInput1" onkeyup="filterFunction('myDropdown1', 'myInput1')">
+        @{
+            foreach (string shipmentNumber in Model.ShipmentMap.Keys)
+            {
+                <a asp-page-handler="SubmitShipment" asp-route-shipmentId="@Model.ShipmentMap[shipmentNumber]" asp-route-burialId="@Model.BurialId">@shipmentNumber</a>
+            }
+        }
     </div>
+</div>
 
-    <input type="submit" value="Add Shipment" asp-page-handler="AddShipmentButton" />
+<link rel="stylesheet" href="~/css/drop_down.css">
+<div class="dropdown">
+    <button onclick="myFunction('myDropdown2')" class="dropbtn" style="background-color: #db144c">Remove Shipment</button>
+    <div id="myDropdown2" class="dropdown-content">
+        <input type="text" placeholder="Search.." id="myInput2" onkeyup="filterFunction('myDropdown2', 'myInput2')">
+        @{
+            foreach (var shipment in Model.BuriedShipments.BuriedShipments)
+            {
 
-</form>
+                <a asp-page-handler="RemoveShipment" asp-route-shipmentId="@shipment.ShipmentId" asp-route-burialId="@Model.BurialId">@shipment.ShipmentNumber</a>
+            }
+        }
+    </div>
+</div>

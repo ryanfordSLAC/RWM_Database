@@ -49,7 +49,7 @@ namespace RWM_Database.Pages.Forms
 
             ItemHandler.LoadItemList();
 
-            PaginatedTable = new PaginatedTable(2, ItemHandler.ItemList.Count);
+            PaginatedTable = new PaginatedTable(10, ItemHandler.ItemList.Count);
 
         }
 
