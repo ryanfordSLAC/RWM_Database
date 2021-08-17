@@ -37,6 +37,8 @@ namespace RWM_Database.Pages.Forms
         public List<AttachmentData> AttachmentList { get; set; }
         public PaginatedTable PaginatedTable { get; set; }
 
+        public Dictionary<int, string> attachmentTypes;
+
         public IFormFile File { get; set; }
 
         public IActionResult OnGet()
@@ -47,9 +49,8 @@ namespace RWM_Database.Pages.Forms
             {
                 return RedirectToPage("/Error", new { CustomError = ("Item not found. item id given: " + ItemId) });
             }
-
-            PaginatedTable = new PaginatedTable(2, AttachmentList.Count);
-
+            PaginatedTable = new PaginatedTable(10, AttachmentList.Count);
+            attachmentTypes = ListTypeHandler.GetIdMap("attachment_type");
             return Page();
         }
 
@@ -68,7 +69,11 @@ namespace RWM_Database.Pages.Forms
                 {
                     return RedirectToPage("/Error", new { CustomError = ("File Too Big. File size > 16 MB") });
                 }
-                else AttachmentHandler.UploadFileToDB(File, this.ItemId, "James Meadows");
+                else
+                {
+                    int attachmentType = Convert.ToInt32(data["AttachmentType"]);
+                    AttachmentHandler.UploadFileToDB(File, this.ItemId, attachmentType, "James Meadows");
+                }
             }
             return RedirectToPage("PreviewWasteDeclarationForm", new { ItemId = this.ItemId });
         }

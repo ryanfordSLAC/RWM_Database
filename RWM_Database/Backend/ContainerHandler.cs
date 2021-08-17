@@ -41,7 +41,7 @@ namespace RWM_Database.Backend
                 this.SealNumber = sealNumber;
                 this.TypeId = type;
                 this.TypeName = typeName;
-                this.DatePacked = datePacked;
+                this.DatePacked = Util.ReformatDate(datePacked);
                 this.PackedBy = packedBy;
                 this.DateCreated = dateCreated;
                 this.UserId = userId;

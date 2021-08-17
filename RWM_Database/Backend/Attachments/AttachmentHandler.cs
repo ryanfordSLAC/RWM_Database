@@ -19,14 +19,16 @@ namespace RWM_Database.Backend.Attachments
             readonly byte[] data;
             readonly string date;
             readonly string creator;
+            readonly int type;
 
-            public AttachmentData(int id, string name, byte[] data, string date, string creator)
+            public AttachmentData(int id, string name, byte[] data, string date, string creator, int type)
             {
                 this.id = id;
                 this.name = name;
                 this.data = data;
                 this.date = date;
                 this.creator = creator;
+                this.type = type;
             }
 
             public string GetAttachmentName()
@@ -60,7 +62,7 @@ namespace RWM_Database.Backend.Attachments
         * Converts attachment file to byte[]
         * Then uploads to the mysql server
         */
-        public static  void UploadFileToDB(IFormFile file, int itemReference, string accountName)
+        public static  void UploadFileToDB(IFormFile file, int itemReference, int attachmentType, string accountName)
         {
             try
             {
@@ -74,7 +76,7 @@ namespace RWM_Database.Backend.Attachments
                 command.CommandText = ("INSERT INTO attachments VALUES(0, @ItemReference, @FileName, @Type, @Data, @Date, @Account_name)");
                 command.Parameters.AddWithValue("@ItemReference", itemReference);
                 command.Parameters.AddWithValue("@FileName", file.FileName);
-                command.Parameters.AddWithValue("@Type", "type");
+                command.Parameters.AddWithValue("@Type", attachmentType);
                 command.Parameters.AddWithValue("@Data", buffer);
                 command.Parameters.AddWithValue("@Date", DateTime.Now.ToString("MM-dd-yyyy"));
                 command.Parameters.AddWithValue("@Account_name", accountName);
@@ -92,12 +94,12 @@ namespace RWM_Database.Backend.Attachments
             {
                 int id = read.GetInt32("attachment_id");
                 string fileName = read.GetString("file_name");
-                string type = read.GetString("type");
+                int typeId = read.GetInt32("type");
                 byte[] byte_data = (byte[])read["data"];
                 string date = read.GetString("date");
                 string account_name = read.GetString("account_name");
 
-                return new AttachmentData(id, fileName, byte_data, date, account_name);
+                return new AttachmentData(id, fileName, byte_data, date, account_name, typeId);
             }
             return null;
         }

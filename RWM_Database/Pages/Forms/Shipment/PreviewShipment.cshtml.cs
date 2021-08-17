@@ -28,12 +28,24 @@ namespace RWM_Database.Pages.Forms.Shipment
         public Dictionary<string, int> ContainersMap;
 
 
-        public void OnGet()
+        public IActionResult OnGet()
         {
             Shipment = ShipmentHandler.LoadShipment(ShipmentId);
+            if (Shipment == null)
+            {
+                return RedirectToPage("/Error", new { CustomError = ("Shipment not found. shipment id given: " + ShipmentId) });
+            }
             ShipmentContainers = new PackedContainerHandler(ShipmentId, -1);
+
+            if (ShipmentContainers == null)
+            {
+                return RedirectToPage("/Error", new { CustomError = ("Shipment containers not found. shipment id given: " + ShipmentId) });
+            }
+
             ContainersMap = ContainerHandler.GetAllContainersMap();
             PaginatedTable = new PaginatedTable(10, ShipmentContainers.PackedContainers.Count);
+
+            return Page();
         }
 
         public IActionResult OnGetSubmitContainer(int containerId, int shipmentId) 

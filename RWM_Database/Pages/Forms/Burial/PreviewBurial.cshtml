@@ -35,7 +35,7 @@
                 <tr>
                     <th>Shipment Number</th>
                     <th>Shipment Type</th>
-                    <th>Conveyance</th>
+                    <th>Max Volume</th>
                 </tr>
                 @{
                     var paginatedTable = Model.PaginatedTable;
@@ -58,7 +58,7 @@
                         <tr>
                             <td><a href="/Forms/Shipment/PreviewShipment?ShipmentId=@shipment.ShipmentId">@shipment.ShipmentNumber</a></td>
                             <td>@shipment.ShipmentTypeName</td>
-                            <td>@shipment.ShipmentConveyance</td>
+                            <td>@shipment.ShipmentMaxVolume ft&sup3</td>
                         </tr>
                     }
                 }

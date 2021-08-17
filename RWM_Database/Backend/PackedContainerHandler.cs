@@ -61,8 +61,18 @@ namespace RWM_Database
 
             public float GetVolume()
             {
-                return Length * Width * Height;
+                return (Length * Width * Height) / 12;
             }
+        }
+
+        public float GetUsedVolumeAllContainers()
+        {
+            float usedVolume = 0f;
+            foreach (int container in this.PackedContainers.Keys)
+            {
+                usedVolume += GetUsedVolume(container);
+            }
+            return usedVolume;
         }
 
         public float GetUsedVolume(int container)
@@ -86,7 +96,7 @@ namespace RWM_Database
         {
             float usedVolume = this.GetUsedVolume(container);
             float totalVolume = this.GetTotalVolume(container);
-            return usedVolume / totalVolume * 100;
+            return (usedVolume / totalVolume) * 100;
         }
 
         public int CountFilledContainers()

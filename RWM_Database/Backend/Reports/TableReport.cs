@@ -18,7 +18,6 @@ namespace RWM_Database.Backend.Reports
                 using (MySqlCommand command = connection.CreateCommand())
                 {
                     command.CommandText = "SELECT COUNT(*) FROM " + table + condition;
-                    Console.WriteLine(command.CommandText);
                     int count = Convert.ToInt32(command.ExecuteScalar());
                     return count;
                 }

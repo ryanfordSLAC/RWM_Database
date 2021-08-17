@@ -32,7 +32,7 @@ namespace RWM_Database.Backend
             public string ItemDescription { get; set; }
             public string AccountNumber { get; set; }
             public bool HarzardousMaterial { get; set; }
-            public string GeneratorName { get; set; }
+            public int GeneratorId { get; set; }
             public string GenerationDate { get; set; }
             public string RecievedBy { get; set; }
             public string RecievedDate { get; set; }
@@ -53,13 +53,13 @@ namespace RWM_Database.Backend
                 this.AccountNumber = accountNumber;
             }
 
-            public void SetItemInformation(bool harzardousMaterial, string generatorName, string generationDate, string recievedBy, string recievedDate)
+            public void SetItemInformation(bool harzardousMaterial, int generatorId, string generationDate, string recievedBy, string recievedDate)
             {
                 this.HarzardousMaterial = harzardousMaterial;
-                this.GeneratorName = generatorName;
-                this.GenerationDate = generationDate;
+                this.GeneratorId = generatorId;
+                this.GenerationDate = Util.ReformatDate(generationDate);
                 this.RecievedBy = recievedBy;
-                this.RecievedDate = recievedDate;
+                this.RecievedDate = Util.ReformatDate(recievedDate);
             }
 
             public void SetDimensions(float length, float width, float height)
@@ -212,7 +212,7 @@ namespace RWM_Database.Backend
             string location = read.GetString("location");
             string accountNumber = read.GetString("account_number");
             bool harzardousMaterial = read.GetBoolean("hazardous_material");
-            string generatorName = read.GetString("generator_name");
+            int generatorId = read.GetInt32("generator_id");
             string generationDate = read.GetString("generation_date");
             string recievedBy = read.GetString("recieved_by");
             string recievedDate = read.GetString("recieved_date");
@@ -232,7 +232,7 @@ namespace RWM_Database.Backend
 
 
             WasteDeclarationData data = new WasteDeclarationData(itemId, declarationNumber, containerId, containerNumber, location, itemDescription, accountNumber);
-            data.SetItemInformation(harzardousMaterial, generatorName, generationDate, recievedBy, recievedDate);
+            data.SetItemInformation(harzardousMaterial, generatorId, generationDate, recievedBy, recievedDate);
             data.SetDimensions(length, width, height);
 
             return data;

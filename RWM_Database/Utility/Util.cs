@@ -13,5 +13,19 @@ namespace RWM_Database.Utility
         {
             return DateTime.Now.ToString("yyyy-MM-dd");
         }
+
+        public static string ReformatDate(string date)
+        {
+
+            try
+            {
+                return DateTime.Parse(date).ToString("MM-dd-yyyy");
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Could not reformat date: " + ex.Message.ToString());
+            }
+            return date;
+        }
     }
 }

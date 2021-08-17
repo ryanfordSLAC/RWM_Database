@@ -4,7 +4,7 @@
         var height = document.getElementById('Height').value;
         var length = document.getElementById('Length').value;
         var width = document.getElementById('Width').value;
-        var result = parseFloat(height) * parseFloat(length) * parseFloat(width);
+        var result = (parseFloat(height) * parseFloat(length) * parseFloat(width)) / 12;
         if (!isNaN(result)) {
             document.getElementById('Volume').innerHTML = result.toFixed(2);
         }
@@ -12,7 +12,7 @@
     }
 
     function calcAddedVolume() {
-        var myselect = document.getElementById("ContainerNumber");
+        var myselect = document.getElementById("ContainerId");
         var container_id = myselect.options[myselect.selectedIndex].value;
         var containerVolume = document.getElementById("hidden_used_" + container_id).value;
         var containerTotal = document.getElementById("hidden_total_" + container_id).value;
@@ -22,9 +22,6 @@
         var totalVolume = parseFloat(containerVolume) + parseFloat(currentVolume);
 
         var percentFilled = totalVolume / parseFloat(containerTotal) * 100;
-
-        console.log(percentFilled);
-        console.log(parseFloat(containerTotal));
 
         if (!isNaN(containerVolume)) {
             document.getElementById('PreviousVolume').innerHTML = parseFloat(containerVolume).toFixed(2);

@@ -27,16 +27,16 @@ namespace RWM_Database.Backend
 
             public string ShipmentNumber { get; set; }
             public int ShipmentType { get; set; }
-            public string ShipmentConveyance { get; set; }
             public string ShipmentTypeName { get; set; }
+            public int ShipmentMaxVolume { get; set; }
 
-            public ShipmentData(int shipmentId, string shipmentNumber, int shipmentType, string shipmentConveyance, string shipmentTypeName)
+            public ShipmentData(int shipmentId, string shipmentNumber, int shipmentType,  string shipmentTypeName, int shipmentMaxVolume)
             {
                 this.ShipmentId = shipmentId;
                 this.ShipmentNumber = shipmentNumber;
                 this.ShipmentType = shipmentType;
-                this.ShipmentConveyance = shipmentConveyance;
                 this.ShipmentTypeName = shipmentTypeName;
+                this.ShipmentMaxVolume = shipmentMaxVolume;
             }
         }
 
@@ -122,19 +122,20 @@ namespace RWM_Database.Backend
             int shipmentId = read.GetInt32("shipment_id");
             string shipmentNumber = read.GetString("shipment_number");
             int shipmentType = read.GetInt32("shipment_type_ref");
-            string shipmentConveyance = read.GetString("shipment_conveyance");
 
             string shipmentTypeName = "None";
+            int shipmentMaxVolume = 0;
 
             if (MySQLHandler.ColumnExists(read, "type_name"))
             {
                 if (!read.IsDBNull(read.GetOrdinal("type_name")))
                 {
                     shipmentTypeName = read.GetString("type_name");
+                    shipmentMaxVolume = read.GetInt32("max_volume");
                 }
             }
 
-            ShipmentData data = new ShipmentData(shipmentId, shipmentNumber, shipmentType, shipmentConveyance, shipmentTypeName);
+            ShipmentData data = new ShipmentData(shipmentId, shipmentNumber, shipmentType, shipmentTypeName, shipmentMaxVolume);
             return data;
         }
 
@@ -143,10 +144,9 @@ namespace RWM_Database.Backend
             try
             {
                 MySqlCommand command = MySQLHandler.GetMySQLConnection().CreateCommand();
-                command.CommandText = ("INSERT INTO shipment VALUES(0, @ShipmentNumber, @ShipmentType, @ShipmentConveyance, @BurialId, @DateShipped, @DateRecieved)");
+                command.CommandText = ("INSERT INTO shipment VALUES(0, @ShipmentNumber, @ShipmentType, @BurialId, @DateShipped, @DateRecieved)");
                 command.Parameters.AddWithValue("@ShipmentNumber", data["ShipmentNumber"]);
                 command.Parameters.AddWithValue("@ShipmentType", Convert.ToInt32(data["ShipmentTypeId"]));
-                command.Parameters.AddWithValue("@ShipmentConveyance", data["ShipmentConveyance"]);
                 command.Parameters.AddWithValue("@BurialId", -1);
                 command.Parameters.AddWithValue("@DateShipped", data["DateShipped"]);
                 command.Parameters.AddWithValue("@DateRecieved", data["DateRecieved"]);
