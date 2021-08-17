@@ -49,7 +49,7 @@ namespace RWM_Database.Pages.Forms
             }
 
             ItemMap = ItemHandler.GetAllItemsMap();
-
+            
             PaginatedTable = new PaginatedTable(10, PackedContainerHandler.PackedWasteForms.Count);
 
             return Page();

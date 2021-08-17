@@ -24,8 +24,26 @@
             <label>Shipment Type:</label>
             <p>@shipmentData.ShipmentTypeName</p>
 
-            <label>Conveyance:</label>
-            <p>@shipmentData.ShipmentConveyance</p>
+        </div>
+
+        <header>Content Details </header>
+
+        <div class="information-container" id="styled_item">
+
+            @{
+                var usedVolume = @Model.ShipmentContainers.GetUsedVolumeAllContainers();
+                var totalShipmentVolume = @Model.Shipment.ShipmentMaxVolume;
+                var capacityUsed = (usedVolume / totalShipmentVolume) * 100;
+
+                <label>Used Volume:</label>
+                <p>@usedVolume.ToString("F") ft&sup3</p>
+
+                <label>Total Shipment Volume:</label>
+                <p>@totalShipmentVolume.ToString("F") ft&sup3</p>
+
+                <label>Capacity Used:</label>
+                <p>@capacityUsed.ToString("F") %</p>
+            }
 
         </div>
 
@@ -65,9 +83,9 @@
 
                         <tr>
                             <td><a href="/Forms/Container/ViewContainer?ContainerId=@container">@containerNumber</a></td>
-                            <td>@volumedUsed ft cubed</td>
-                            <td>@totalVolume ft cubed</td>
-                            <td>@percentFilled %</td>
+                            <td>@volumedUsed.ToString("F") ft&sup3</td>
+                            <td>@totalVolume.ToString("F") ft&sup3</td>
+                            <td>@percentFilled.ToString("F") %</td>
                         </tr>
                     }
                 }

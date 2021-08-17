@@ -34,7 +34,6 @@ namespace RWM_Database.Pages.Forms.Burial
             //check not null
             BuriedShipments = new BuriedShipmentHandler(BurialId);
             ShipmentMap = ShipmentHandler.GetAllShipmentsMap();
-            Console.WriteLine("SDsd " + ShipmentMap.Count);
             PaginatedTable = new PaginatedTable(10, BuriedShipments.BuriedShipments.Count);
         }
 

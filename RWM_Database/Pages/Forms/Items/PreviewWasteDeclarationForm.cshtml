@@ -18,10 +18,10 @@
         var length = WasteForm.Length;
         var width = WasteForm.Width;
         var height = WasteForm.Height;
-        var volume = length * width * height;
+        var volume = (length * width * height) /12;
 
 
-        var generatorName = WasteForm.GeneratorName;
+        var generatorId = WasteForm.GeneratorId;
         var generationDate = WasteForm.GenerationDate;
         var recievedBy = WasteForm.RecievedBy;
         var recievedDate = WasteForm.RecievedDate;
@@ -54,17 +54,17 @@
             <p>@hazardousMaterial</p>
 
             <label>Length:</label>
-            <p>@length ft</p>
+            <p>@length in</p>
             
 
             <label>Width:</label>
-            <p>@width ft</p>
+            <p>@width in</p>
 
             <label>Height:</label>
-            <p>@height ft</p>
+            <p>@height in</p>
 
             <label>Calculated Volume:</label>
-            <p>@volume ft&sup3</p>
+            <p>@volume.ToString("F") ft&sup3</p>
 
         </div>
 
@@ -73,7 +73,7 @@
         <div class="information-container" id="styled_item">
 
             <label>Generator Name:</label>
-            <p>@generatorName</p>
+            <p>@generatorId</p>
 
             <label>Generation Date:</label>
             <p>@generationDate</p>
@@ -137,6 +137,14 @@
             <link rel="stylesheet" href="~/css/upload_button.css">
 
             <form method="post" enctype="multipart/form-data" id="upload_button">
+                <label>Attachment Type:</label>
+                <select id="AttachmentType" name="AttachmentType">
+                    @foreach (int attachmentType in @Model.attachmentTypes.Keys)
+                    {
+                        <option value="@attachmentType">@Model.attachmentTypes[attachmentType]</option>
+                    }
+                </select>
+                <br />
                 <input type="file" asp-for="File" />
                 <input type="submit" value="Submit Attachment" />
             </form>

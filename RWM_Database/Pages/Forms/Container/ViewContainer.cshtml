@@ -41,6 +41,27 @@
 
         </div>
 
+        <header>Content Details </header>
+
+        <div class="information-container" id="styled_item">
+
+            @{
+                var usedVolume = @Model.PackedContainerHandler.GetUsedVolume(Model.ContainerId);
+                var totalVolume = @Model.PackedContainerHandler.GetTotalVolume(Model.ContainerId);
+                var capacityUsed = @Model.PackedContainerHandler.GetPercentUsedVolume(Model.ContainerId);
+
+                <label>Used Volume:</label>
+                <p>@usedVolume.ToString("F") ft&sup3</p>
+
+                <label>Total Container Volume:</label>
+                <p>@totalVolume.ToString("F") ft&sup3</p>
+
+                <label>Capacity Used:</label>
+                <p>@capacityUsed.ToString("F") %</p>
+            }
+
+        </div>
+
         <header>Items Included</header>
 
         <div class="table-container" id="styled_item">
@@ -72,9 +93,9 @@
 
                         <tr>
                             <td><a href="/Forms/Items/PreviewWasteDeclarationForm?ItemId=@item.ItemId">@item.DeclarationNumber</a></td>
-                            <td>@item.Length ft</td>
-                            <td>@item.Width ft</td>
-                            <td>@item.Height ft</td>
+                            <td>@item.Length in</td>
+                            <td>@item.Width in</td>
+                            <td>@item.Height in</td>
                         </tr>
                     }
                 }

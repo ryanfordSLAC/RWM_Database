@@ -22,7 +22,7 @@ namespace RWM_Database.Pages.Forms.ListType
         public int CurrentPage { get; set; }
 
 
-        public string[] TableNames = new string[] { "container_type", "shipment_type", "people" };
+        public string[] TableNames = new string[] { "container_type", "shipment_type", "people", "attachment_type" };
 
 
         public MappedTable table;

@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using MySql.Data.MySqlClient;
 using RWM_Database.Backend;
+using static RWM_Database.Backend.PeopleHandler;
 using static RWM_Database.Pages.Forms.ViewContainerModel;
 
 /* 
@@ -20,9 +21,11 @@ namespace RWM_Database.Pages.Forms
     public class CreateContainerModel : PageModel
     {
         public Dictionary<int, string> containerTypeMap;
+        public List<PeopleData> people;
         public void OnGet()
         {
             containerTypeMap = ListTypeHandler.GetIdMap("container_type");
+            people = PeopleHandler.LoadPeopleCondition(null);
         }
 
         /*
@@ -32,6 +35,12 @@ namespace RWM_Database.Pages.Forms
 
         public IActionResult OnPostSubmitButton(IFormCollection data)
         {
+
+            if (!data.ContainsKey("TypeId"))
+            {
+                return RedirectToPage("/Error", new { CustomError = ("Invalid container type provided. Please select a container type or create a new one") });
+            }
+
             ContainerHandler.CreateContainer(data);
             return RedirectToPage("ContainerDashboard");
         }

@@ -6,6 +6,8 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using MySql.Data.MySqlClient;
+using RWM_Database.Backend;
+using static RWM_Database.Backend.PeopleHandler;
 
 namespace RWM_Database.Pages.Forms
 {
@@ -14,11 +16,12 @@ namespace RWM_Database.Pages.Forms
 
         public PackedContainerHandler ContainerHandler { get; set; }
 
-
+        public List<PeopleData> people;
 
         public void OnGet()
         {
             ContainerHandler = new PackedContainerHandler(-1, -1);
+            people = PeopleHandler.LoadPeopleCondition(null);
         }
 
         public IActionResult OnPostSubmitButton(IFormCollection data)
@@ -50,14 +53,14 @@ namespace RWM_Database.Pages.Forms
                 }
 
                 MySqlCommand command = MySQLHandler.GetMySQLConnection().CreateCommand();
-                command.CommandText = ("INSERT INTO items VALUES(0, @DeclarationNumber, @ContainerId, @ItemDescription, @Location, @AccountNumber, @HazardousMaterial, @GeneratorName, @GenerationDate, @RecievedBy, @RecievedDate, @Length, @Width, @Height, @UserID)");
+                command.CommandText = ("INSERT INTO items VALUES(0, @DeclarationNumber, @ContainerId, @ItemDescription, @Location, @AccountNumber, @HazardousMaterial, @GeneratorId, @GenerationDate, @RecievedBy, @RecievedDate, @Length, @Width, @Height, @UserID)");
                 command.Parameters.AddWithValue("@DeclarationNumber", data["DeclarationNumber"]);
                 command.Parameters.AddWithValue("@ContainerId", containerId);
                 command.Parameters.AddWithValue("@ItemDescription", data["ItemDescription"]);
                 command.Parameters.AddWithValue("@Location", data["Location"]);
                 command.Parameters.AddWithValue("@AccountNumber", data["AccountNumber"]);
                 command.Parameters.AddWithValue("@HazardousMaterial", data["HazardousMaterial"]);
-                command.Parameters.AddWithValue("@GeneratorName", data["GeneratorName"]);
+                command.Parameters.AddWithValue("@GeneratorId", data["GeneratorId"]);
                 command.Parameters.AddWithValue("@GenerationDate", data["GenerationDate"]);
                 command.Parameters.AddWithValue("@RecievedBy", data["RecievedBy"]);
                 command.Parameters.AddWithValue("@RecievedDate", data["RecievedDate"]);

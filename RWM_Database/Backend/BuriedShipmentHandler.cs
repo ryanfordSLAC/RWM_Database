@@ -25,7 +25,7 @@ namespace RWM_Database.Backend
             {
                 MySqlConnection connection = MySQLHandler.GetMySQLConnection();
                 MySqlCommand command = connection.CreateCommand();
-                command.CommandText = "SELECT * FROM burial LEFT JOIN shipment ON shipment.burial_ref = burial.burial_id";
+                command.CommandText = "SELECT * FROM burial LEFT JOIN shipment ON shipment.burial_ref = burial.burial_id LEFT JOIN shipment_type ON shipment.shipment_type_ref = shipment_type.shipment_type_id";
                 if (burialId != -1)
                 {
                     command.CommandText += " WHERE burial.burial_id = @BurialId";

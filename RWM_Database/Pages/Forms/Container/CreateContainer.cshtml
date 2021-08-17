@@ -35,7 +35,6 @@
 
         <label for="TypeId">Container Type:</label>
         <select id="TypeId" name="TypeId">
-            <option value="-1">None</option>
             @foreach (int typeId in @Model.containerTypeMap.Keys)
             {
                 var typeName = Model.containerTypeMap[typeId];
@@ -47,7 +46,12 @@
         <input type="date" id="DatePacked" name="DatePacked" required>
 
         <label for="PackedBy">Packed By:</label>
-        <input type="text" id="PackedBy" name="PackedBy" required>
+        <select id="PackedBy" name="PackedBy">
+            @foreach (var person in @Model.people)
+            {
+                <option value="@person.PeopleId">@person.FirstName @person.LastName</option>
+            }
+        </select>
 
 
     </div>

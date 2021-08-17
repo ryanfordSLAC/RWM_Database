@@ -33,7 +33,7 @@
     <tr>
         <th>Shipment Number</th>
         <th>Shipment Type</th>
-        <th>Conveyance</th>
+        <th>Max Volume</th>
     </tr>
     @{
         var search = Model.ShipmentHandler.Search;
@@ -54,7 +54,7 @@
             <tr>
                 <td><a href="/Forms/Shipment/PreviewShipment?ShipmentId=@element.ShipmentId">@element.ShipmentNumber</a></td>
                 <td>@element.ShipmentTypeName</td>
-                <td>@element.ShipmentConveyance</td>
+                <td>@element.ShipmentMaxVolume ft&sup3</td>
             </tr>
         }
     }

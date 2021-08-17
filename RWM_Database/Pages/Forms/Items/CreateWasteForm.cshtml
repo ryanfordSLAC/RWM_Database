@@ -73,23 +73,26 @@
         </select>
 
 
-        <label for="GeneratorName">Generator Name:</label>
+        <label for="GeneratorId">Generator Name:</label>
 
-        <div data-tip="@Settings.GetStringSetting("Item_Generator_Tip")">
-            <input type="text" id="GeneratorName" name="GeneratorName" size="45" required maxlength="45">
-        </div>
+        <select id="GeneratorId" name="GeneratorId" >
+            @foreach (var person in @Model.people)
+            {
+                <option value="@person.PeopleId">@person.FirstName @person.LastName</option>
+            }
+        </select>
 
 
         <label for="GenerationDate">Generation Date:</label>
         <input type="date" id="GenerationDate" name="GenerationDate" size="45" required>
 
- 
+
         <label for="RecievedBy">Recieved By:</label>
         <div data-tip="@Settings.GetStringSetting("Item_Recieved_By_Tip")">
             <input type="text" id="RecievedBy" name="RecievedBy" size="45" required maxlength="45">
         </div>
 
-        
+
 
         <label for="RecievedDate">Recieved Date:</label>
         <input type="date" id="RecievedDate" name="RecievedDate" size="45" required>
@@ -99,7 +102,7 @@
     <header>Packing Specifications</header>
     <div class="information-container" id="styled_form">
 
-        <label for="ContainerNumber">Select Container:</label>
+        <label for="ContainerId">Select Container:</label>
 
         @foreach (int container in @Model.ContainerHandler.PackedContainers.Keys)
         {
@@ -110,6 +113,7 @@
         }
 
         <select id="ContainerId" name="ContainerId" onchange="calcAddedVolume()">
+            <option value="-1">None</option>
             @foreach (int container in @Model.ContainerHandler.PackedContainers.Keys)
             {
                 var usedVolume = @Model.ContainerHandler.GetPercentUsedVolume(container);
