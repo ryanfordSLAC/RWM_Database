@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -12,6 +13,16 @@ namespace RWM_Database.Utility
         public static string GetCurrentDate()
         {
             return DateTime.Now.ToString("yyyy-MM-dd");
+        }
+
+        public static string ToTitleCase(string title)
+        {
+            return CultureInfo.CurrentCulture.TextInfo.ToTitleCase(title.ToLower());
+        }
+
+        public static float GetVolumeConversion()
+        {
+            return 1728;
         }
 
         public static string ReformatDate(string date)

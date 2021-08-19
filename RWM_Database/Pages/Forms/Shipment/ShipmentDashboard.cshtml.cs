@@ -33,7 +33,7 @@ namespace RWM_Database.Pages.Forms.Shipment
             SearchByField search = ShipmentHandler.Search;
 
             search.AddSearch("shipment_number",SearchShipmentNumber);
-            search.AddSearch("shipment_type", SearchShipmentType);
+            search.AddSearch("type_name", SearchShipmentType);
 
             ShipmentHandler.GetShipmentList();
 

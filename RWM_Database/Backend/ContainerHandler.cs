@@ -1,10 +1,12 @@
 ﻿using Microsoft.AspNetCore.Http;
 using MySql.Data.MySqlClient;
+using RWM_Database.Backend.Attachments;
 using RWM_Database.Utility;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using static RWM_Database.Backend.Attachments.AttachmentHandler;
 
 namespace RWM_Database.Backend
 {
@@ -24,25 +26,30 @@ namespace RWM_Database.Backend
         {
             public int ContainerId { get; set; }
             public string ContainerNumber { get; set; }
+            public int SealNumberId { get; set; }
+
             public string SealNumber { get; set; }
             public int TypeId { get; set; }
             public string TypeName { get; set; }
             public string DatePacked { get; set; }
             public string PackedBy { get; set; }
+            public string PackedByName { get; set; }
             public string DateCreated { get; set; }
             public string UserId { get; set; }
             public int ShipmentId { get; set; }
             public string ShipmentName { get; set; }
 
-            public ContainerData(int containerId, string containerNumber, string sealNumber, int type, string typeName, string datePacked, string packedBy, string dateCreated, string userId, int shipmentId, string shipmentName)
+            public ContainerData(int containerId, string containerNumber, int sealNumberId, string sealNumber, int type, string typeName, string datePacked, string packedBy, string packedByName, string dateCreated, string userId, int shipmentId, string shipmentName)
             {
                 this.ContainerId = containerId;
                 this.ContainerNumber = containerNumber;
+                this.SealNumberId = sealNumberId;
                 this.SealNumber = sealNumber;
                 this.TypeId = type;
                 this.TypeName = typeName;
                 this.DatePacked = Util.ReformatDate(datePacked);
                 this.PackedBy = packedBy;
+                this.PackedByName = packedByName;
                 this.DateCreated = dateCreated;
                 this.UserId = userId;
                 this.ShipmentId = shipmentId;
@@ -127,7 +134,7 @@ namespace RWM_Database.Backend
         {
             int containerId = read.GetInt32("container_id");
             string containerNumber = read.GetString("container_number");
-            string sealNumber = read.GetString("seal_number");
+            int sealNumberId = read.GetInt32("seal_number_id");
             int type = read.GetInt32("type_ref");
             string datePacked = read.GetString("date_packed");
             string packedBy = read.GetString("packed_by");
@@ -155,7 +162,27 @@ namespace RWM_Database.Backend
                 }
             }
 
-            return new ContainerData(containerId, containerNumber, sealNumber, type, typeName, datePacked, packedBy, dateCreated, userId, shipmentId, shipmentName);
+            string sealNumber = "Invalid Seal Number";
+
+            if (MySQLHandler.ColumnExists(read, "seal_number"))
+            {
+                if (!read.IsDBNull(read.GetOrdinal("seal_number")))
+                {
+                    sealNumber = read.GetString("seal_number");
+                }
+            }
+
+            string packedByName = "Invalid Packed By";
+
+            if (MySQLHandler.ColumnExists(read, "first_name") && MySQLHandler.ColumnExists(read, "last_name"))
+            {
+                if (!read.IsDBNull(read.GetOrdinal("first_name")) && !read.IsDBNull(read.GetOrdinal("last_name")))
+                {
+                    packedByName = read.GetString("first_name") + " " + read.GetString("last_name");
+                }
+            }
+
+            return new ContainerData(containerId, containerNumber, sealNumberId, sealNumber, type, typeName, datePacked, packedBy, packedByName, dateCreated, userId, shipmentId, shipmentName);
         }
 
         public void LoadContainers()
@@ -165,7 +192,7 @@ namespace RWM_Database.Backend
             {
                 MySqlConnection connection = MySQLHandler.GetMySQLConnection();
                 MySqlCommand command = connection.CreateCommand();
-                string baseCommand = "SELECT * FROM container LEFT JOIN container_type ON container.type_ref = container_type.container_type_id LEFT JOIN shipment ON container.shipment_ref = shipment.shipment_id";
+                string baseCommand = "SELECT * FROM container LEFT JOIN container_type ON container.type_ref = container_type.container_type_id LEFT JOIN shipment ON container.shipment_ref = shipment.shipment_id LEFT JOIN seal_number_type ON container.seal_number_id = seal_number_type.seal_number_id LEFT JOIN people ON container.packed_by = people.people_id";
                 command.CommandText = MySQLHandler.GetSearchCommand(baseCommand, Search, command);
 
                 MySqlDataReader read = command.ExecuteReader();
@@ -185,14 +212,14 @@ namespace RWM_Database.Backend
             }
         }
 
-        public static ContainerData LoadContainerData(int containerId)
+        public static ContainerData LoadContainerData(int containerId, List<AttachmentData> attachments)
         {
             ContainerData data = null;
             try
             {
                 MySqlConnection connection = MySQLHandler.GetMySQLConnection();
                 MySqlCommand command = connection.CreateCommand();
-                command.CommandText = "SELECT * FROM container LEFT JOIN container_type ON container.type_ref = container_type.container_type_id WHERE container_id = @ContainerId ";
+                command.CommandText = "SELECT * FROM container LEFT JOIN attachments ON container.container_id = attachments.item_reference LEFT JOIN attachment_type ON attachments.type = attachment_type.attachment_type_id LEFT JOIN container_type ON container.type_ref = container_type.container_type_id LEFT JOIN seal_number_type ON container.seal_number_id = seal_number_type.seal_number_id LEFT JOIN people ON container.packed_by = people.people_id WHERE container_id = @ContainerId ";
                 command.Parameters.AddWithValue("@ContainerId", containerId);
 
                 MySqlDataReader read = command.ExecuteReader();
@@ -202,6 +229,16 @@ namespace RWM_Database.Backend
                     while (read.Read())
                     {
                         data = CreateContainerDataObject(read);
+
+                        AttachmentData attachmentData = AttachmentHandler.CreateAttachmentObject(read);
+                        if (attachmentData != null)
+                        {
+                            if (attachmentData.GetAttachmentTypeName() == Settings.GetStringSetting("Container_Attachment_Type"))
+                            {
+                                attachments.Add(attachmentData);
+                            }
+                        }
+
                     }
                 }
                 connection.Close();

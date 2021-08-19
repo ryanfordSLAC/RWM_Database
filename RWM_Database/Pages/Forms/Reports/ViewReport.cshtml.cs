@@ -1,5 +1,7 @@
 using System;
 using System.Collections.Generic;
+using System.Data;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
@@ -30,7 +32,7 @@ namespace RWM_Database.Pages.Forms.Reports
 
         public PaginatedTable PaginatedTable { get; set; }
 
-        public void OnGet()
+        public IActionResult OnGet()
         {
             if (ReportType == "0")
             {
@@ -44,7 +46,17 @@ namespace RWM_Database.Pages.Forms.Reports
             {
                 ItemsReport = ItemHandler.LoadItemsCondition("WHERE hazardous_material = TRUE");
             }
+            else if (ReportType == "2")
+            {
+
+            }
+            else if (ReportType == "3")
+            {
+               
+            }
             PaginatedTable = new PaginatedTable(10, ItemsReport.Count);
+            return Page();
         }
+
     }
 }

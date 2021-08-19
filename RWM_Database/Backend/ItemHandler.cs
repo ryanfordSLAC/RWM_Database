@@ -34,8 +34,10 @@ namespace RWM_Database.Backend
             public bool HarzardousMaterial { get; set; }
             public int GeneratorId { get; set; }
             public string GenerationDate { get; set; }
-            public string RecievedBy { get; set; }
+            public int RecievedById { get; set; }
             public string RecievedDate { get; set; }
+
+            public bool SealedSource { get; set; }
 
             public float Length { get; set; }
             public float Width { get; set; }
@@ -53,13 +55,14 @@ namespace RWM_Database.Backend
                 this.AccountNumber = accountNumber;
             }
 
-            public void SetItemInformation(bool harzardousMaterial, int generatorId, string generationDate, string recievedBy, string recievedDate)
+            public void SetItemInformation(bool harzardousMaterial, int generatorId, string generationDate, int recievedBy, string recievedDate, bool sealedSource)
             {
                 this.HarzardousMaterial = harzardousMaterial;
                 this.GeneratorId = generatorId;
                 this.GenerationDate = Util.ReformatDate(generationDate);
-                this.RecievedBy = recievedBy;
+                this.RecievedById = recievedBy;
                 this.RecievedDate = Util.ReformatDate(recievedDate);
+                this.SealedSource = sealedSource;
             }
 
             public void SetDimensions(float length, float width, float height)
@@ -180,7 +183,7 @@ namespace RWM_Database.Backend
         {
             WasteDeclarationData form = null;
 
-            string baseCommand = "SELECT * FROM items LEFT JOIN attachments ON items.item_id = attachments.item_reference LEFT JOIN container ON items.container_ref = container.container_id WHERE items.item_id = @id";
+            string baseCommand = "SELECT * FROM items LEFT JOIN attachments ON items.item_id = attachments.item_reference LEFT JOIN attachment_type ON attachments.type = attachment_type.attachment_type_id LEFT JOIN container ON items.container_ref = container.container_id WHERE items.item_id = @id";
 
             void onCreate(MySqlCommand command)
             {
@@ -194,7 +197,10 @@ namespace RWM_Database.Backend
                 AttachmentData attachmentData = AttachmentHandler.CreateAttachmentObject(read);
                 if (attachmentData != null)
                 {
-                    attachments.Add(attachmentData);
+                    if (attachmentData.GetAttachmentTypeName() == Settings.GetStringSetting("Item_Attachment_Type"))
+                    {
+                        attachments.Add(attachmentData);
+                    }
                 }
             }
 
@@ -214,8 +220,9 @@ namespace RWM_Database.Backend
             bool harzardousMaterial = read.GetBoolean("hazardous_material");
             int generatorId = read.GetInt32("generator_id");
             string generationDate = read.GetString("generation_date");
-            string recievedBy = read.GetString("recieved_by");
+            int recievedBy = read.GetInt32("recieved_by");
             string recievedDate = read.GetString("recieved_date");
+            bool sealedSource = read.GetBoolean("sealed_source");
             float length = read.GetFloat("length");
             float width = read.GetFloat("width");
             float height = read.GetFloat("height");
@@ -232,7 +239,7 @@ namespace RWM_Database.Backend
 
 
             WasteDeclarationData data = new WasteDeclarationData(itemId, declarationNumber, containerId, containerNumber, location, itemDescription, accountNumber);
-            data.SetItemInformation(harzardousMaterial, generatorId, generationDate, recievedBy, recievedDate);
+            data.SetItemInformation(harzardousMaterial, generatorId, generationDate, recievedBy, recievedDate, sealedSource);
             data.SetDimensions(length, width, height);
 
             return data;

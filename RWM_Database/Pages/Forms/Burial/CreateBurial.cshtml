@@ -12,15 +12,27 @@
 
     <header>Shipment Information</header>
     <div class="information-container" id="styled_form">
+
         <label for="BurialNumber">Burial Number:</label>
-        <input type="text" id="BurialNumber" name="BurialNumber" required>
+        <div data-tip="@Settings.GetStringSetting("Burial_Number_Tip")">
+            <input type="text" id="BurialNumber" name="BurialNumber" size="45" required maxlength="45">
+        </div>
 
         <label for="Certificate">Certificate:</label>
-        <input type="text" id="Certificate" name="Certificate" required>
+        <div data-tip="@Settings.GetStringSetting("Certificate_Tip")">
+            <input type="text" id="Certificate" name="Certificate" size="45" required maxlength="45">
+        </div>
 
         <label for="CertificateDate">Certificate Date:</label>
         <input type="date" id="CertificateDate" name="CertificateDate" required>
 
+        <label for="DisposalSite">Disposal Site:</label>
+        <select id="DisposalSite" name="DisposalSite">
+            @foreach (var disposalId in @Model.disposalTypeMap.Keys)
+            {
+                <option value="@disposalId">@Model.disposalTypeMap[disposalId]</option>
+            }
+        </select>
 
     </div>
 

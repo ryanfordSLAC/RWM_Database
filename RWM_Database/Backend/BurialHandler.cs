@@ -1,10 +1,12 @@
 ﻿using Microsoft.AspNetCore.Http;
 using MySql.Data.MySqlClient;
+using RWM_Database.Backend.Attachments;
 using RWM_Database.Utility;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using static RWM_Database.Backend.Attachments.AttachmentHandler;
 
 namespace RWM_Database.Backend
 {
@@ -29,11 +31,14 @@ namespace RWM_Database.Backend
 
             public string Certificate { get; set; }
 
-            public BurialData(int burialId, string burialNumber, string certificate)
+            public string DisposalSite { get; set; }
+
+            public BurialData(int burialId, string burialNumber, string certificate, string disposalSite)
             {
                 this.BurialId = burialId;
                 this.BurialNumber = burialNumber;
                 this.Certificate = certificate;
+                this.DisposalSite = disposalSite;
             }
         }
 
@@ -46,7 +51,7 @@ namespace RWM_Database.Backend
             {
                 MySqlConnection connection = MySQLHandler.GetMySQLConnection();
                 MySqlCommand command = connection.CreateCommand();
-                string baseCommand = "SELECT * FROM burial";
+                string baseCommand = "SELECT * FROM burial LEFT JOIN disposal_site_type ON burial.disposal_site_ref = disposal_site_type.disposal_site_id";
                 command.CommandText = MySQLHandler.GetSearchCommand(baseCommand, Search, command);
 
                 MySqlDataReader read = command.ExecuteReader();
@@ -73,7 +78,17 @@ namespace RWM_Database.Backend
             string burialNumber = read.GetString("burial_number");
             string certificate = read.GetString("certificate");
 
-            BurialData data = new BurialData(burialId, burialNumber, certificate);
+            string disposalSite = "Invalid Disposal Site";
+
+            if (MySQLHandler.ColumnExists(read, "disposal_site"))
+            {
+                if (!read.IsDBNull(read.GetOrdinal("disposal_site")))
+                {
+                    disposalSite = read.GetString("disposal_site");
+                }
+            }
+
+            BurialData data = new BurialData(burialId, burialNumber, certificate, disposalSite);
             return data;
         }
 
@@ -83,10 +98,11 @@ namespace RWM_Database.Backend
             {
 
                 MySqlCommand command = MySQLHandler.GetMySQLConnection().CreateCommand();
-                command.CommandText = ("INSERT INTO burial VALUES(0, @BurialNumber, @Certificate, @CertificateDate)");
+                command.CommandText = ("INSERT INTO burial VALUES(0, @BurialNumber, @Certificate, @CertificateDate, @DisposalSite)");
                 command.Parameters.AddWithValue("@BurialNumber", data["BurialNumber"]);
                 command.Parameters.AddWithValue("@Certificate", data["Certificate"]);
                 command.Parameters.AddWithValue("@CertificateDate", data["CertificateDate"]);
+                command.Parameters.AddWithValue("@DisposalSite", data["DisposalSite"]);
                 command.ExecuteReader();
             }
             catch (MySqlException ex)
@@ -95,7 +111,7 @@ namespace RWM_Database.Backend
             }
         }
 
-        public static BurialData LoadBurial(int burialId)
+        public static BurialData LoadBurial(int burialId, List<AttachmentData> attachments)
         {
             BurialData data = null;
             try
@@ -103,7 +119,7 @@ namespace RWM_Database.Backend
                 MySqlConnection connection = MySQLHandler.GetMySQLConnection();
                 MySqlCommand command = connection.CreateCommand();
 
-                command.CommandText = "SELECT * FROM burial WHERE burial_id = @BurialId";
+                command.CommandText = "SELECT * FROM burial LEFT JOIN attachments ON burial.burial_id = attachments.item_reference LEFT JOIN attachment_type ON attachments.type = attachment_type.attachment_type_id LEFT JOIN disposal_site_type ON burial.disposal_site_ref = disposal_site_type.disposal_site_id WHERE burial_id = @BurialId";
                 command.Parameters.AddWithValue("@BurialId", burialId);
                 MySqlDataReader read = command.ExecuteReader();
                 if (read.HasRows)
@@ -111,6 +127,15 @@ namespace RWM_Database.Backend
                     while (read.Read())
                     {
                         data = CreateBurialDataObject(read);
+
+                        AttachmentData attachmentData = AttachmentHandler.CreateAttachmentObject(read);
+                        if (attachmentData != null)
+                        {
+                            if (attachmentData.GetAttachmentTypeName() == Settings.GetStringSetting("Burial_Attachment_Type"))
+                            {
+                                attachments.Add(attachmentData);
+                            }
+                        }
                     }
                 }
                 connection.Close();

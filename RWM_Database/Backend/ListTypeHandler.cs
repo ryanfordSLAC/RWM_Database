@@ -19,7 +19,7 @@ namespace RWM_Database.Backend
             public Dictionary<string, object> valueMap = new Dictionary<string, object>();
         }
 
-        public static List<ListTypeData> LoadListTypeValues(string tableName, MappedTable table)
+        public static List<ListTypeData> LoadListTypeValues(string tableName, MappedTable table, string condition)
         {
             List<ListTypeData> list = new List<ListTypeData>();
             try
@@ -27,6 +27,11 @@ namespace RWM_Database.Backend
                 MySqlConnection connection = MySQLHandler.GetMySQLConnection();
                 MySqlCommand command = connection.CreateCommand();
                 command.CommandText = "SELECT * FROM " + tableName;
+
+                if (condition != null)
+                {
+                    command.CommandText += " " + condition;
+                }
 
                 MySqlDataReader read = command.ExecuteReader();
                 if (read.HasRows)

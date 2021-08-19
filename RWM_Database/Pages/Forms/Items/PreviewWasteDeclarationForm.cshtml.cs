@@ -12,6 +12,7 @@ using RWM_Database.Pages.Forms;
 using RWM_Database.Utility;
 using static RWM_Database.Backend.Attachments.AttachmentHandler;
 using static RWM_Database.Backend.ItemHandler;
+using static RWM_Database.Backend.PeopleHandler;
 
 namespace RWM_Database.Pages.Forms
 {
@@ -39,6 +40,8 @@ namespace RWM_Database.Pages.Forms
 
         public Dictionary<int, string> attachmentTypes;
 
+        public List<PeopleData> people;
+
         public IFormFile File { get; set; }
 
         public IActionResult OnGet()
@@ -51,6 +54,9 @@ namespace RWM_Database.Pages.Forms
             }
             PaginatedTable = new PaginatedTable(10, AttachmentList.Count);
             attachmentTypes = ListTypeHandler.GetIdMap("attachment_type");
+
+            people = PeopleHandler.LoadPeopleCondition(null);
+
             return Page();
         }
 
@@ -72,13 +78,22 @@ namespace RWM_Database.Pages.Forms
                 else
                 {
                     int attachmentType = Convert.ToInt32(data["AttachmentType"]);
-                    AttachmentHandler.UploadFileToDB(File, this.ItemId, attachmentType, "James Meadows");
+                    AttachmentHandler.UploadFileToDB(File, this.ItemId, attachmentType, "SLAC Employee");
                 }
             }
             return RedirectToPage("PreviewWasteDeclarationForm", new { ItemId = this.ItemId });
         }
 
+        public float GetVolumeConversion()
+        {
+            return Util.GetVolumeConversion();
+        }
 
+        public string FindPersonById(int id)
+        {
+            PeopleData data = people.Find(p => p.PeopleId == id);
+            return data.FirstName + " " + data.LastName;
+        }
 
     }
 }

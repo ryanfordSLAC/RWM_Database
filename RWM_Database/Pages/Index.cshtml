@@ -15,10 +15,8 @@
 
         <label for="ReportType">Report Type:</label>
         <select id="ReportType" name="ReportType">
-            <option value="0">Items Shipped Between</option>
+            <option value="0">Items Declared Between</option>
             <option value="1">Items Hazardous</option>
-            <option value="2">Items Buried</option>
-            <option value="3">Incomplete Items</option>
         </select>
 
         <label for="StartDate">Start Date:</label>
@@ -31,6 +29,23 @@
 
     <input type="submit" value="Generate Report" asp-page-handler="ViewButton" />
 </form>
+
+
+<form class="form" method="post" id="create_form">
+
+    <header>Export Database</header>
+    <div class="information-container" id="styled_form">
+
+        <label for="ReportType">Report Type:</label>
+        <select id="ReportType" name="ReportType">
+            <option value="0">Full Database Export</option>
+        </select>
+
+    </div>
+
+    <input type="submit" value="Export Database" asp-page-handler="ExportButton" />
+</form>
+
 
 
 <link rel="stylesheet" href="~/css/view_item.css">

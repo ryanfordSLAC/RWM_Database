@@ -18,13 +18,14 @@
         var length = WasteForm.Length;
         var width = WasteForm.Width;
         var height = WasteForm.Height;
-        var volume = (length * width * height) /12;
+        var volume = (length * width * height) / @Model.GetVolumeConversion();
 
 
         var generatorId = WasteForm.GeneratorId;
         var generationDate = WasteForm.GenerationDate;
-        var recievedBy = WasteForm.RecievedBy;
+        var recievedBy = WasteForm.RecievedById;
         var recievedDate = WasteForm.RecievedDate;
+        var sealedSource = WasteForm.SealedSource;
 
         <header>Item Information </header>
 
@@ -43,6 +44,9 @@
 
             <label>Account Number:</label>
             <p>@accountNumber</p>
+
+            <label>Sealed Source:</label>
+            <p>@sealedSource</p>
 
         </div>
 
@@ -73,13 +77,13 @@
         <div class="information-container" id="styled_item">
 
             <label>Generator Name:</label>
-            <p>@generatorId</p>
+            <p>@Model.FindPersonById(generatorId)</p>
 
             <label>Generation Date:</label>
             <p>@generationDate</p>
 
             <label>Recieved By:</label>
-            <p>@recievedBy</p>
+            <p>@Model.FindPersonById(recievedBy)</p>
 
             <label>Recieved Date:</label>
             <p>@recievedDate</p>
@@ -139,8 +143,23 @@
             <form method="post" enctype="multipart/form-data" id="upload_button">
                 <label>Attachment Type:</label>
                 <select id="AttachmentType" name="AttachmentType">
+                    @{
+                        var defaultOption = @Settings.GetStringSetting("Item_Attachment_Type");
+
+                        foreach (int attachmentType in @Model.attachmentTypes.Keys)
+                        {
+                            var val = Model.attachmentTypes[attachmentType];
+                            if (val == defaultOption)
+                            {
+                                <option selected value="@attachmentType">@defaultOption</option>
+                            }
+
+                        }
+                    }
+
                     @foreach (int attachmentType in @Model.attachmentTypes.Keys)
                     {
+                        if (Model.attachmentTypes[attachmentType] == defaultOption) continue;
                         <option value="@attachmentType">@Model.attachmentTypes[attachmentType]</option>
                     }
                 </select>

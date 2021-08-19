@@ -25,6 +25,9 @@
             <label>Certificate:</label>
             <p>@burialData.Certificate</p>
 
+            <label>Disposal Site:</label>
+            <p>@burialData.DisposalSite</p>
+
         </div>
 
         <header>Shipments Included</header>
@@ -105,4 +108,69 @@
             }
         }
     </div>
+</div>
+
+
+
+
+<header>Attachments</header>
+<div class="table-container" id="styled_item">
+
+    <link rel="stylesheet" href="~/css/table.css">
+    <table id="styled_table">
+        <tr>
+            <th>File Name</th>
+            <th>Date Submitted</th>
+            <th>Submitted By</th>
+        </tr>
+
+        @{
+            for (int i = 0; i < Model.AttachmentList.Count; i++)
+            {
+                var attachment = Model.AttachmentList[i];
+                <tr>
+                    <td><a href="/Attachment/ViewAttachment?FileId=@attachment.GetAttachmentId()" id="fileName">@attachment.GetAttachmentName()</a></td>
+                    <td>@attachment.GetAttachmentDate()</td>
+                    <td>@attachment.GetAttachmentCreator()</td>
+                </tr>
+            }
+        }
+
+    </table>
+
+
+    <link rel="stylesheet" href="~/css/upload_button.css">
+
+    <form method="post" enctype="multipart/form-data" id="upload_button">
+        <label>Attachment Type:</label>
+        <select id="AttachmentType" name="AttachmentType">
+
+                @{
+                    var defaultOption = @Settings.GetStringSetting("Burial_Attachment_Type");
+
+                    foreach(int attachmentType in @Model.attachmentTypes.Keys)
+                    {
+                        var val = Model.attachmentTypes[attachmentType];
+                        if (val == defaultOption)
+                        {
+                             <option selected value="@attachmentType">@defaultOption</option>
+                        }
+                       
+                    }
+
+                }
+           
+
+     
+
+                @foreach (int attachmentType in @Model.attachmentTypes.Keys)
+                {
+                    if (Model.attachmentTypes[attachmentType] == defaultOption) continue;
+                    <option value="@attachmentType">@Model.attachmentTypes[attachmentType]</option>
+                }
+            </select>
+        <br />
+        <input type="file" asp-for="File" />
+        <input type="submit" value="Submit Attachment" id="upload_button" />
+    </form>
 </div>

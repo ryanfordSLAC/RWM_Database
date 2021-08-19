@@ -28,6 +28,7 @@
     <tr>
         <th>Burial Number</th>
         <th>Certificate</th>
+        <th>Disposal Site</th>
     </tr>
     @{
         var search = Model.BurialHandler.Search;
@@ -48,6 +49,7 @@
             <tr>
                 <td><a href="/Forms/Burial/PreviewBurial?BurialId=@element.BurialId">@element.BurialNumber</a></td>
                 <td>@element.Certificate</td>
+                <td>@element.DisposalSite</td>
             </tr>
         }
     }

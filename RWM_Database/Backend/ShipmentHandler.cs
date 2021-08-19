@@ -1,10 +1,12 @@
 ﻿using Microsoft.AspNetCore.Http;
 using MySql.Data.MySqlClient;
+using RWM_Database.Backend.Attachments;
 using RWM_Database.Utility;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using static RWM_Database.Backend.Attachments.AttachmentHandler;
 
 namespace RWM_Database.Backend
 {
@@ -158,7 +160,7 @@ namespace RWM_Database.Backend
             }
         }
 
-        public static ShipmentData LoadShipment(int shipmentId)
+        public static ShipmentData LoadShipment(int shipmentId, List<AttachmentData> attachments)
         {
             ShipmentData data = null;
             try
@@ -166,7 +168,7 @@ namespace RWM_Database.Backend
                 MySqlConnection connection = MySQLHandler.GetMySQLConnection();
                 MySqlCommand command = connection.CreateCommand();
 
-                command.CommandText = "SELECT * FROM shipment LEFT JOIN shipment_type ON shipment.shipment_type_ref = shipment_type.shipment_type_id WHERE shipment_id = @ShipmentId";
+                command.CommandText = "SELECT * FROM shipment LEFT JOIN attachments ON shipment.shipment_id = attachments.item_reference LEFT JOIN attachment_type ON attachments.type = attachment_type.attachment_type_id LEFT JOIN shipment_type ON shipment.shipment_type_ref = shipment_type.shipment_type_id WHERE shipment_id = @ShipmentId";
                 command.Parameters.AddWithValue("@ShipmentId", shipmentId);
                 Console.WriteLine(command.CommandText);
                 MySqlDataReader read = command.ExecuteReader();
@@ -175,6 +177,16 @@ namespace RWM_Database.Backend
                     while (read.Read())
                     {
                         data = CreateShipmentDataObject(read);
+
+                        AttachmentData attachmentData = AttachmentHandler.CreateAttachmentObject(read);
+                        if (attachmentData != null)
+                        {
+                            if (attachmentData.GetAttachmentTypeName() == Settings.GetStringSetting("Shipment_Attachment_Type"))
+                            {
+                                attachments.Add(attachmentData);
+                            }
+                        }
+
                     }
                 }
                 connection.Close();

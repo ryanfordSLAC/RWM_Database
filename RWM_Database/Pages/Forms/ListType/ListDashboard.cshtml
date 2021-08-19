@@ -25,9 +25,21 @@
         <select id="ListName" name="ListName">
 
             @{
+                <option selected="selected">
+                    @{ 
+                        var defaultOption = Model.ListName;
+                        if (defaultOption == null)
+                        {
+                            defaultOption = "Select List Type";
+                        }
+                        @Model.FixOutput(defaultOption);
+                    }
+                        
+                </option>
                 foreach (string name in Model.TableNames)
                 {
-                    <option value="@name">@name</option>
+                    if (name == Model.ListName)continue;
+                    <option value="@name">@Model.FixOutput(name)</option>
                 }
             }
         </select>
@@ -56,15 +68,22 @@
                 {
                     var data = table.map[column];
 
-                    <label for="@column">@column:</label>
+                    <label for="@column">@Model.FixOutput(column):</label>
 
                     if (data.IsNumericType())
                     {
                         <input type="number" id="@column" name="@column" required>
                     }
+                    else if (data.IsBoolean())
+                    {
+                        <select id="@column" name="@column">
+                            <option value="0">No</option>
+                            <option value="1">Yes</option>
+                        </select>
+                    }
                     else
                     {
-                        <input type="text" id="@column" name="@column" required>
+                        <input type="text" id="@column" name="@column" required maxlength="45">
                     }
                 }
             }
@@ -83,7 +102,7 @@
         <tr>
             @foreach (string column in Model.table.map.Keys)
             {
-                <th>@column</th>
+                <th>@Model.FixOutput(column)</th>
             }
         </tr>
         var paginatedTable = Model.PaginatedTable;

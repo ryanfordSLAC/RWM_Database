@@ -53,7 +53,7 @@ namespace RWM_Database.Pages.Forms
                 }
 
                 MySqlCommand command = MySQLHandler.GetMySQLConnection().CreateCommand();
-                command.CommandText = ("INSERT INTO items VALUES(0, @DeclarationNumber, @ContainerId, @ItemDescription, @Location, @AccountNumber, @HazardousMaterial, @GeneratorId, @GenerationDate, @RecievedBy, @RecievedDate, @Length, @Width, @Height, @UserID)");
+                command.CommandText = ("INSERT INTO items VALUES(0, @DeclarationNumber, @ContainerId, @ItemDescription, @Location, @AccountNumber, @HazardousMaterial, @GeneratorId, @GenerationDate, @RecievedBy, @RecievedDate, @SealedSource, @Length, @Width, @Height, @UserID)");
                 command.Parameters.AddWithValue("@DeclarationNumber", data["DeclarationNumber"]);
                 command.Parameters.AddWithValue("@ContainerId", containerId);
                 command.Parameters.AddWithValue("@ItemDescription", data["ItemDescription"]);
@@ -64,11 +64,11 @@ namespace RWM_Database.Pages.Forms
                 command.Parameters.AddWithValue("@GenerationDate", data["GenerationDate"]);
                 command.Parameters.AddWithValue("@RecievedBy", data["RecievedBy"]);
                 command.Parameters.AddWithValue("@RecievedDate", data["RecievedDate"]);
+                command.Parameters.AddWithValue("@SealedSource", data["SealedSource"]);
                 command.Parameters.AddWithValue("@Length", (float)Convert.ToDouble(data["Length"]));
                 command.Parameters.AddWithValue("@Width", (float)Convert.ToDouble(data["Width"]));
                 command.Parameters.AddWithValue("@Height", (float)Convert.ToDouble(data["Height"]));
                 command.Parameters.AddWithValue("@UserID", -1);
-                Console.WriteLine(command.CommandText);
                 command.ExecuteReader();
             }
             catch (MySqlException ex)
