@@ -30,7 +30,12 @@
 
 
         <label for="SealNumber">Seal Number:</label>
-        <input type="text" id="SealNumber" name="SealNumber" required>
+        <select id="SealNumber" name="SealNumber">
+            @foreach (var sealNumber in @Model.sealTypeMap.Keys)
+            {
+                <option value="@sealNumber">@Model.sealTypeMap[sealNumber]</option>
+            }
+        </select>
 
 
         <label for="TypeId">Container Type:</label>
@@ -43,7 +48,9 @@
         </select>
 
         <label for="DatePacked">Date Packed:</label>
-        <input type="date" id="DatePacked" name="DatePacked" required>
+        <div data-tip="@Settings.GetStringSetting("Container_PackedBy_Tip")">
+            <input type="date" id="DatePacked" name="DatePacked" required style="width: 25em">
+        </div>
 
         <label for="PackedBy">Packed By:</label>
         <select id="PackedBy" name="PackedBy">

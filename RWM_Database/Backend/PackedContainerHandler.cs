@@ -1,4 +1,5 @@
 ﻿using MySql.Data.MySqlClient;
+using RWM_Database.Utility;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -61,7 +62,7 @@ namespace RWM_Database
 
             public float GetVolume()
             {
-                return (Length * Width * Height) / 12;
+                return (Length * Width * Height) / Util.GetVolumeConversion();
             }
         }
 

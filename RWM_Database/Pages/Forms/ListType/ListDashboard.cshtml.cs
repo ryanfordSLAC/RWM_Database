@@ -22,7 +22,7 @@ namespace RWM_Database.Pages.Forms.ListType
         public int CurrentPage { get; set; }
 
 
-        public string[] TableNames = new string[] { "container_type", "shipment_type", "people", "attachment_type" };
+        public string[] TableNames = new string[] { "container_type", "shipment_type", "people", "attachment_type", "seal_number_type", "disposal_site_type" };
 
 
         public MappedTable table;
@@ -41,7 +41,7 @@ namespace RWM_Database.Pages.Forms.ListType
             {
                 table = new MappedTable(ListName, true);
 
-                ListTypeData = ListTypeHandler.LoadListTypeValues(ListName, table);
+                ListTypeData = ListTypeHandler.LoadListTypeValues(ListName, table, null);
 
                 PaginatedTable = new PaginatedTable(10, table.GetTable().Rows.Count);
 
@@ -67,7 +67,7 @@ namespace RWM_Database.Pages.Forms.ListType
         {
             try
             {
-                MappedTable table =  new MappedTable(listName, true);
+                MappedTable table = new MappedTable(listName, true);
                 ListTypeHandler.CreateListTypeEntry(listName, data, table);
                 return RedirectToPage("ListDashboard", new { ListName = listName });
             }
@@ -76,7 +76,13 @@ namespace RWM_Database.Pages.Forms.ListType
                 Console.WriteLine(ex.Message.ToString());
                 return RedirectToPage("/Error", new { CustomError = ("Failed to create list type entry") });
             }
+        }
 
+        public string FixOutput(string column)
+        {
+            string output = column.Replace("_" , " ");
+            output = Util.ToTitleCase(output);
+            return output;
         }
     }
 }

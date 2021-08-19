@@ -21,10 +21,12 @@ namespace RWM_Database.Pages.Forms
     public class CreateContainerModel : PageModel
     {
         public Dictionary<int, string> containerTypeMap;
+        public Dictionary<int, string> sealTypeMap;
         public List<PeopleData> people;
         public void OnGet()
         {
             containerTypeMap = ListTypeHandler.GetIdMap("container_type");
+            sealTypeMap = ListTypeHandler.GetIdMap("seal_number_type");
             people = PeopleHandler.LoadPeopleCondition(null);
         }
 
@@ -39,6 +41,11 @@ namespace RWM_Database.Pages.Forms
             if (!data.ContainsKey("TypeId"))
             {
                 return RedirectToPage("/Error", new { CustomError = ("Invalid container type provided. Please select a container type or create a new one") });
+            }
+
+            if (!data.ContainsKey("SealNumber"))
+            {
+                return RedirectToPage("/Error", new { CustomError = ("Invalid seal number provided. Please select a container type or create a new one") });
             }
 
             ContainerHandler.CreateContainer(data);

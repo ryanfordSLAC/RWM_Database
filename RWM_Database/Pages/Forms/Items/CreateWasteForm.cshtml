@@ -72,10 +72,16 @@
             <option value="1">Yes</option>
         </select>
 
+        <label for="SealedSource">Sealed Source:</label>
+        <select id="SealedSource" name="SealedSource">
+            <option value="0">No</option>
+            <option value="1">Yes</option>
+        </select>
+
 
         <label for="GeneratorId">Generator Name:</label>
 
-        <select id="GeneratorId" name="GeneratorId" >
+        <select id="GeneratorId" name="GeneratorId">
             @foreach (var person in @Model.people)
             {
                 <option value="@person.PeopleId">@person.FirstName @person.LastName</option>
@@ -88,10 +94,13 @@
 
 
         <label for="RecievedBy">Recieved By:</label>
-        <div data-tip="@Settings.GetStringSetting("Item_Recieved_By_Tip")">
-            <input type="text" id="RecievedBy" name="RecievedBy" size="45" required maxlength="45">
-        </div>
 
+        <select id="RecievedBy" name="RecievedBy">
+            @foreach (var person in @Model.people)
+            {
+                <option value="@person.PeopleId">@person.FirstName @person.LastName</option>
+            }
+        </select>
 
 
         <label for="RecievedDate">Recieved Date:</label>

@@ -1,7 +1,9 @@
 ﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 using MySql.Data.MySqlClient;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -21,7 +23,9 @@ namespace RWM_Database.Backend.Attachments
             readonly string creator;
             readonly int type;
 
-            public AttachmentData(int id, string name, byte[] data, string date, string creator, int type)
+            readonly string attachmentType;
+
+            public AttachmentData(int id, string name, byte[] data, string date, string creator, int type, string attachmentType)
             {
                 this.id = id;
                 this.name = name;
@@ -29,6 +33,7 @@ namespace RWM_Database.Backend.Attachments
                 this.date = date;
                 this.creator = creator;
                 this.type = type;
+                this.attachmentType = attachmentType;
             }
 
             public string GetAttachmentName()
@@ -49,6 +54,16 @@ namespace RWM_Database.Backend.Attachments
             public string GetAttachmentDate()
             {
                 return date;
+            }
+
+            public int GetAttachmentType()
+            {
+                return type;
+            }
+
+            public string GetAttachmentTypeName()
+            {
+                return attachmentType;
             }
 
             public string GetAttachmentCreator()
@@ -99,7 +114,18 @@ namespace RWM_Database.Backend.Attachments
                 string date = read.GetString("date");
                 string account_name = read.GetString("account_name");
 
-                return new AttachmentData(id, fileName, byte_data, date, account_name, typeId);
+                string attachmentType = "Invalid Attachment Type";
+
+                if (MySQLHandler.ColumnExists(read, "document_type"))
+                {
+                    if (!read.IsDBNull(read.GetOrdinal("document_type")))
+                    {
+                        attachmentType = read.GetString("document_type");
+                    }
+                }
+
+
+                return new AttachmentData(id, fileName, byte_data, date, account_name, typeId, attachmentType);
             }
             return null;
         }

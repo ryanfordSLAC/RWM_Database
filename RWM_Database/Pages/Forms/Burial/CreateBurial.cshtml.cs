@@ -11,9 +11,11 @@ namespace RWM_Database.Pages.Forms.Burial
 {
     public class CreateBurialModel : PageModel
     {
+
+        public Dictionary<int, string> disposalTypeMap;
         public void OnGet()
         {
-
+            disposalTypeMap = ListTypeHandler.GetIdMap("disposal_site_type");
         }
 
         public IActionResult OnPostSubmitButton(IFormCollection data)

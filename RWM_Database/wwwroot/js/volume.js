@@ -4,7 +4,7 @@
         var height = document.getElementById('Height').value;
         var length = document.getElementById('Length').value;
         var width = document.getElementById('Width').value;
-        var result = (parseFloat(height) * parseFloat(length) * parseFloat(width)) / 12;
+        var result = (parseFloat(height) * parseFloat(length) * parseFloat(width)) / 1728;
         if (!isNaN(result)) {
             document.getElementById('Volume').innerHTML = result.toFixed(2);
         }
