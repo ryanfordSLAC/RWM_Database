@@ -14,8 +14,11 @@ namespace RWM_Database
 {
 
     /* 
-    * Used for handling the database connection
+    * Class description: Provides useful functions called throughout the program for MySQL management
+    * 
     * Author: James Meadows
+    * Intern at SLAC during summer of 2021
+    * For questions contact by email at: jamesmeadows18@outlook.com
     */
 
     public class MySQLHandler
@@ -23,9 +26,9 @@ namespace RWM_Database
 
         private static string connectionString;
 
+
         public static MySqlConnection GetMySQLConnection()
         {
-            //open MySQL connection. TODO: keep a persistent mysql connection open.
 
             string login = GetLoginCredentials();
             MySqlConnection connection = new MySqlConnection(login);
@@ -55,6 +58,9 @@ namespace RWM_Database
             return connectionString;
         }
 
+        /* 
+        * Used in the search bars of the dashboard views. Adds a search parameter to the MySQL query
+        */
 
         public static string GetSearchCommand(string start, SearchByField search, MySqlCommand command)
         {
@@ -104,6 +110,9 @@ namespace RWM_Database
             return false;
         }
 
+        /* 
+        * Cleaner way to read from the database. Not used in every mysql command
+        */
 
         public static void ReadFromDatabase(Action<MySqlCommand> onCreate, Action<MySqlDataReader> onRead)
         {

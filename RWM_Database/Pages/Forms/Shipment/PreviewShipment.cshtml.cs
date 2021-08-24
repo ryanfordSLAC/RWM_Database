@@ -13,12 +13,22 @@ using static RWM_Database.Backend.ShipmentHandler;
 
 namespace RWM_Database.Pages.Forms.Shipment
 {
+
+    /* 
+    * Class description: Loads a specific shipment from a given shipment id
+    * 
+    * Author: James Meadows
+    * Intern at SLAC during summer of 2021
+    * For questions contact by email at: jamesmeadows18@outlook.com
+    */
+
     public class PreviewShipmentModel : PageModel
     {
-
+        //shipment id referenced as the shipment_id in mysql
         [BindProperty(Name = "ShipmentId", SupportsGet = true)]
         public int ShipmentId { get; set; }
 
+        //For table pagination 
         [BindProperty(Name = "CurrentPage", SupportsGet = true)]
         public int CurrentPage { get; set; }
 
@@ -28,13 +38,16 @@ namespace RWM_Database.Pages.Forms.Shipment
 
         public PaginatedTable PaginatedTable { get; set; }
 
+        //Used to convert from container id to container number
         public Dictionary<string, int> ContainersMap;
 
 
         public Dictionary<int, string> attachmentTypes;
 
+        //Attachment file
         public IFormFile File { get; set; }
 
+        //List of already attached files
         public List<AttachmentData> AttachmentList = new List<AttachmentData>();
 
 
@@ -59,11 +72,21 @@ namespace RWM_Database.Pages.Forms.Shipment
             return Page();
         }
 
+        
+
+        /* 
+        * Add container to shipment by updating its referenced shipment in the container table 
+        */
+
         public IActionResult OnGetSubmitContainer(int containerId, int shipmentId) 
         {
             ContainerHandler.UpdateContainerShipment(containerId, shipmentId);
             return RedirectToPage("PreviewShipment", new { ShipmentId = shipmentId });
         }
+
+         /* 
+        * Remove container by setting the referenced shipment id to -1 which is essentially null
+        */
 
         public IActionResult OnGetRemoveContainer(int containerId, int shipmentId)
         {
@@ -83,6 +106,7 @@ namespace RWM_Database.Pages.Forms.Shipment
                 }
                 else if (length > 16000000)
                 {
+                    //max file size of 16mb
                     return RedirectToPage("/Error", new { CustomError = ("File Too Big. File size > 16 MB") });
                 }
                 else

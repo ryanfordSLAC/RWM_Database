@@ -10,14 +10,24 @@ using RWM_Database.Utility;
 
 namespace RWM_Database.Pages.Forms.Burial
 {
+
+        /* 
+    * Class description: Displays a table of existing burials
+    * 
+    * Author: James Meadows
+    * Intern at SLAC during summer of 2021
+    * For questions contact by email at: jamesmeadows18@outlook.com
+    */
+
     public class BurialDashboardModel : PageModel
     {
         public BurialHandler BurialHandler { get; set; }
 
+        //search burial table by burial_number
         [BindProperty(Name = "SearchBurialNumber", SupportsGet = true)]
         public string SearchBurialNumber { get; set; }
 
-
+        //table pagination
         [BindProperty(Name = "CurrentPage", SupportsGet = true)]
         public int CurrentPage { get; set; }
 

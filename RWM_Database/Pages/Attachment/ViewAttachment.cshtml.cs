@@ -9,17 +9,20 @@ using MySql.Data.MySqlClient;
 namespace RWM_Database.Pages.Forms.Attachment
 {
 
-    /* 
-    * Loads an image preview of an attachment
-    * specified from the directing webpage
+        /* 
+    * Class description: Loads an attachment from the attachments table in MySQL
+    * 
     * Author: James Meadows
+    * Intern at SLAC during summer of 2021
+    * For questions contact by email at: jamesmeadows18@outlook.com
     */
     public class ViewAttachmentModel : PageModel
     {
-
+        //attachment_id in MySQL table
         [BindProperty(Name = "FileId", SupportsGet = true)]
         public int FileId { get; set; }
 
+        //byte[] of the file data
         public byte[] ContentData { get; set; }
 
         public string FileName { get; set; }

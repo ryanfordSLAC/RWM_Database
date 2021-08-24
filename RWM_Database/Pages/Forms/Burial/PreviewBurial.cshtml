@@ -113,8 +113,9 @@
 
 
 
-<header>Attachments</header>
+<link rel="stylesheet" href="~/css/view_item.css">
 <div class="table-container" id="styled_item">
+    <header>Attachments</header>
 
     <link rel="stylesheet" href="~/css/table.css">
     <table id="styled_table">
@@ -145,30 +146,30 @@
         <label>Attachment Type:</label>
         <select id="AttachmentType" name="AttachmentType">
 
-                @{
-                    var defaultOption = @Settings.GetStringSetting("Burial_Attachment_Type");
+            @{
+                var defaultOption = @Settings.GetStringSetting("Burial_Attachment_Type");
 
-                    foreach(int attachmentType in @Model.attachmentTypes.Keys)
+                foreach (int attachmentType in @Model.attachmentTypes.Keys)
+                {
+                    var val = Model.attachmentTypes[attachmentType];
+                    if (val == defaultOption)
                     {
-                        var val = Model.attachmentTypes[attachmentType];
-                        if (val == defaultOption)
-                        {
-                             <option selected value="@attachmentType">@defaultOption</option>
-                        }
-                       
+                        <option selected value="@attachmentType">@defaultOption</option>
                     }
 
                 }
-           
 
-     
+            }
 
-                @foreach (int attachmentType in @Model.attachmentTypes.Keys)
-                {
-                    if (Model.attachmentTypes[attachmentType] == defaultOption) continue;
-                    <option value="@attachmentType">@Model.attachmentTypes[attachmentType]</option>
-                }
-            </select>
+
+
+
+            @foreach (int attachmentType in @Model.attachmentTypes.Keys)
+            {
+                //if (Model.attachmentTypes[attachmentType] == defaultOption) continue;
+                //<option value="@attachmentType">@Model.attachmentTypes[attachmentType]</option>
+            }
+        </select>
         <br />
         <input type="file" asp-for="File" />
         <input type="submit" value="Submit Attachment" id="upload_button" />

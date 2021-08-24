@@ -6,6 +6,15 @@ using System.Threading.Tasks;
 namespace RWM_Database
 {
 
+
+    /* 
+    * Class description: Loads various settings from the appsettings.json file
+    * 
+    * Author: James Meadows
+    * Intern at SLAC during summer of 2021
+    * For questions contact by email at: jamesmeadows18@outlook.com
+    */
+
     public class Settings
     {
 

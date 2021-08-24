@@ -125,8 +125,9 @@
     </div>
 </div>
 
-<header>Attachments</header>
+<link rel="stylesheet" href="~/css/view_item.css">
 <div class="table-container" id="styled_item">
+    <header>Attachments</header>
 
     <link rel="stylesheet" href="~/css/table.css">
     <table id="styled_table">
@@ -173,8 +174,8 @@
 
             @foreach (int attachmentType in @Model.attachmentTypes.Keys)
             {
-                if (Model.attachmentTypes[attachmentType] == defaultOption) continue;
-                <option value="@attachmentType">@Model.attachmentTypes[attachmentType]</option>
+                //if (Model.attachmentTypes[attachmentType] == defaultOption) continue;
+                //<option value="@attachmentType">@Model.attachmentTypes[attachmentType]</option>
             }
         </select>
         <br />

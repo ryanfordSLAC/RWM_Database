@@ -31,6 +31,7 @@
 
         <label for="SealNumber">Seal Number:</label>
         <select id="SealNumber" name="SealNumber">
+            <option value="-1">None</option>
             @foreach (var sealNumber in @Model.sealTypeMap.Keys)
             {
                 <option value="@sealNumber">@Model.sealTypeMap[sealNumber]</option>

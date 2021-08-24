@@ -13,17 +13,27 @@ using static RWM_Database.Backend.BurialHandler;
 
 namespace RWM_Database.Pages.Forms.Burial
 {
+
+    /* 
+    * Class description: Display a burial entry from a given BurialId
+    * 
+    * Author: James Meadows
+    * Intern at SLAC during summer of 2021
+    * For questions contact by email at: jamesmeadows18@outlook.com
+    */
     public class PreviewBurialModel : PageModel
     {
-
+        //references burial_id in the MySQL table
         [BindProperty(Name = "BurialId", SupportsGet = true)]
         public int BurialId { get; set; }
 
+        //table pagination
         [BindProperty(Name = "CurrentPage", SupportsGet = true)]
         public int CurrentPage { get; set; }
 
         public BurialData Burial { get; set; }
 
+        //list of shipments attached to the burial
         public BuriedShipmentHandler BuriedShipments { get; set; }
 
         public PaginatedTable PaginatedTable { get; set; }
@@ -63,12 +73,15 @@ namespace RWM_Database.Pages.Forms.Burial
             return Page();
         }
 
+
+        //updates a given shipment's referenced burial to this burial 
         public IActionResult OnGetSubmitShipment(int shipmentId, int burialId)
         {
             ShipmentHandler.UpdateShipmentBurial(shipmentId, burialId);
             return RedirectToPage("PreviewBurial", new { BurialId = burialId });
         }
 
+        //updates a given shipment's referenced burial to null shipment
         public IActionResult OnGetRemoveShipment(int shipmentId, int burialId)
         {
             ShipmentHandler.UpdateShipmentBurial(shipmentId, -1);

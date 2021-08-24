@@ -10,6 +10,13 @@ using static RWM_Database.Backend.Attachments.AttachmentHandler;
 
 namespace RWM_Database.Backend
 {
+        /* 
+    * Class description: Backend MySQL for handling container table
+    * 
+    * Author: James Meadows
+    * Intern at SLAC during summer of 2021
+    * For questions contact by email at: jamesmeadows18@outlook.com
+    */
     public class ContainerHandler
     {
 
@@ -211,7 +218,7 @@ namespace RWM_Database.Backend
                 Console.WriteLine(ex.Message.ToString());
             }
         }
-
+        //loads a container from a given container_id. attachments is an empty list that will populate with attachments loaded here
         public static ContainerData LoadContainerData(int containerId, List<AttachmentData> attachments)
         {
             ContainerData data = null;

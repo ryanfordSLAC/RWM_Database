@@ -19,27 +19,32 @@ namespace RWM_Database.Pages.Forms
 
 
     /* 
-    * Displays a preview of the Waste declaration form
-    * from the given declaration number directed 
-    * from a different webpage
+    * Class description: Displays an existing item declaration from a given item_id in the MySQL table
+    * 
     * Author: James Meadows
+    * Intern at SLAC during summer of 2021
+    * For questions contact by email at: jamesmeadows18@outlook.com
     */
 
     public class PreviewWasteDeclarationFormModel : PageModel
     {
-
+        //references item_id in MySQL items table
         [BindProperty(Name = "ItemId", SupportsGet = true)]
         public int ItemId { get; set;}
 
+        //table pagination
         [BindProperty(Name = "CurrentPage", SupportsGet = true)]
         public int CurrentPage { get; set; }
 
         public WasteDeclarationData Form { get; set; }
+
+        //list of attached files
         public List<AttachmentData> AttachmentList { get; set; }
         public PaginatedTable PaginatedTable { get; set; }
 
         public Dictionary<int, string> attachmentTypes;
 
+        //convert from people id to LastName FirstName
         public List<PeopleData> people;
 
         public IFormFile File { get; set; }
@@ -84,6 +89,7 @@ namespace RWM_Database.Pages.Forms
             return RedirectToPage("PreviewWasteDeclarationForm", new { ItemId = this.ItemId });
         }
 
+        //convert to cubic feet 12 * 12 * 12
         public float GetVolumeConversion()
         {
             return Util.GetVolumeConversion();

@@ -10,6 +10,15 @@ using static RWM_Database.Utility.MappedTable;
 
 namespace RWM_Database.Backend
 {
+
+        /* 
+    * Class description: Backend MySQL for handling the list type tables
+    * 
+    * Author: James Meadows
+    * Intern at SLAC during summer of 2021
+    * For questions contact by email at: jamesmeadows18@outlook.com
+    */
+
     public class ListTypeHandler
     {
 
@@ -19,6 +28,7 @@ namespace RWM_Database.Backend
             public Dictionary<string, object> valueMap = new Dictionary<string, object>();
         }
 
+        //Loads list type values. Only supports float, int32, string, and boolean. MySQL list type table must use only those types
         public static List<ListTypeData> LoadListTypeValues(string tableName, MappedTable table, string condition)
         {
             List<ListTypeData> list = new List<ListTypeData>();
@@ -72,6 +82,7 @@ namespace RWM_Database.Backend
             return list;
         }
 
+        //add a list type entry to the given MySQL table
         public static void CreateListTypeEntry(string tableName, IFormCollection data, MappedTable table) 
         {
             MySqlCommand command = MySQLHandler.GetMySQLConnection().CreateCommand();
@@ -92,7 +103,7 @@ namespace RWM_Database.Backend
             command.ExecuteReader();
         }
 
-
+        //map of first two columns. This should reference their id and their readable name or number
         public static Dictionary<int,string> GetIdMap(string tableName)
         {
             Dictionary<int, string> map = new Dictionary<int, string>();

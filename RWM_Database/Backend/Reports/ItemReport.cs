@@ -6,6 +6,13 @@ using System.Threading.Tasks;
 
 namespace RWM_Database.Backend.Reports
 {
+     /* 
+    * Class description: MySQL backend for generating reports for the main dashboard
+    * 
+    * Author: James Meadows
+    * Intern at SLAC during summer of 2021
+    * For questions contact by email at: jamesmeadows18@outlook.com
+    */
     public class ItemReport
     {
 

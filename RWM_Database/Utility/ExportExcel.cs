@@ -9,6 +9,11 @@ using System.Threading.Tasks;
 
 namespace RWM_Database.Utility
 {
+
+    /* 
+    * Class description: Last minute setup to export to excel. Could use more work.
+    */
+
     public class ExportExcel
     {
         public static Stylesheet CreateStyleSheet()
