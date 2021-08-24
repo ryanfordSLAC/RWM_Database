@@ -7,9 +7,16 @@ using static RWM_Database.Backend.ShipmentHandler;
 
 namespace RWM_Database.Backend
 {
+    /* 
+    * Class description: Backend MySQL for shipments that reference a burial
+    * 
+    * Author: James Meadows
+    * Intern at SLAC during summer of 2021
+    * For questions contact by email at: jamesmeadows18@outlook.com
+    */
     public class BuriedShipmentHandler
     {
-
+        //list of shipments with a given burial_id as their 'burial_ref'
         public List<ShipmentData> BuriedShipments { get; set; }
 
         public BuriedShipmentHandler(int burialId)

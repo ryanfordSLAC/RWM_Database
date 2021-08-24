@@ -11,23 +11,30 @@ using static RWM_Database.Backend.PeopleHandler;
 using static RWM_Database.Pages.Forms.ViewContainerModel;
 
 /* 
- * This class creates containers in the database
- * from user form input
- * Author: James Meadows
+* Class description: Adds container to the database in the container table
+* 
+* Author: James Meadows
+* Intern at SLAC during summer of 2021
+* For questions contact by email at: jamesmeadows18@outlook.com
 */
 
 namespace RWM_Database.Pages.Forms
 {
     public class CreateContainerModel : PageModel
     {
+        //convert container type id to container type name
         public Dictionary<int, string> containerTypeMap;
+
+        //convert seal id to seal number
         public Dictionary<int, string> sealTypeMap;
+
+        //convert people id to LastName FirstName
         public List<PeopleData> people;
         public void OnGet()
         {
             containerTypeMap = ListTypeHandler.GetIdMap("container_type");
             sealTypeMap = ListTypeHandler.GetIdMap("seal_number_type");
-            people = PeopleHandler.LoadPeopleCondition(null);
+            people = PeopleHandler.LoadPeopleCondition(null); //null means no WHERE clause for mysql search
         }
 
         /*

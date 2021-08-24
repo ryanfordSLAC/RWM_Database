@@ -10,17 +10,29 @@ using RWM_Database.Utility;
 
 namespace RWM_Database.Pages.Forms.Shipment
 {
+
+    /* 
+    * Class description: Shows a list of shipments in a table format
+    * 
+    * Author: James Meadows
+    * Intern at SLAC during summer of 2021
+    * For questions contact by email at: jamesmeadows18@outlook.com
+    */
+
     public class ShipmentDashboardModel : PageModel
     {
 
         public ShipmentHandler ShipmentHandler { get; set; }
 
+        //Input in the search field of the dashboard
         [BindProperty(Name = "SearchShipmentNumber", SupportsGet = true)]
         public string SearchShipmentNumber { get; set; }
 
+        //Input in the search field of the dashboard
         [BindProperty(Name = "SearchShipmentType", SupportsGet = true)]
         public string SearchShipmentType { get; set; }
 
+        //For table pagination
         [BindProperty(Name = "CurrentPage", SupportsGet = true)]
         public int CurrentPage { get; set; }
 

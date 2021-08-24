@@ -13,6 +13,15 @@ using System.Threading.Tasks;
 
 namespace RWM_Database.Pages
 {
+
+            /* 
+    * Class description: Main dashboard menu. Shows basic report information
+    * 
+    * Author: James Meadows
+    * Intern at SLAC during summer of 2021
+    * For questions contact by email at: jamesmeadows18@outlook.com
+    */
+
     public class IndexModel : PageModel
     {
         private readonly ILogger<IndexModel> _logger;
@@ -57,6 +66,8 @@ namespace RWM_Database.Pages
 
             );
 
+
+            //these mysql columns will not be displayed in the Excel output
             List<string> omit = new List<string>();
             omit.Add("item_id");
             omit.Add("container_ref");

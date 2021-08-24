@@ -10,17 +10,27 @@ using RWM_Database.Utility;
 
 namespace RWM_Database.Pages.Forms.Container
 {
+
+    /* 
+    * Class description: Container dashboard which shows a table of existing containers
+    * 
+    * Author: James Meadows
+    * Intern at SLAC during summer of 2021
+    * For questions contact by email at: jamesmeadows18@outlook.com
+    */
     public class ContainerDashboardModel : PageModel
     {
         public ContainerHandler ContainerHandler { get; set; }
 
+        //search table by container_number
         [BindProperty(Name = "SearchContainerNumber", SupportsGet = true)]
         public string SearchContainerNumber { get; set; }
 
+        //search table by shipment number
         [BindProperty(Name = "SearchShipmentNumber", SupportsGet = true)]
         public string SearchShipmentNumber { get; set; }
 
-
+        //table pagination
         [BindProperty(Name = "CurrentPage", SupportsGet = true)]
         public int CurrentPage { get; set; }
 
@@ -37,7 +47,7 @@ namespace RWM_Database.Pages.Forms.Container
 
             ContainerHandler.LoadContainers();
 
-            PaginatedTable = new PaginatedTable(2, ContainerHandler.ContainerList.Count);
+            PaginatedTable = new PaginatedTable(10, ContainerHandler.ContainerList.Count);
 
 
         }

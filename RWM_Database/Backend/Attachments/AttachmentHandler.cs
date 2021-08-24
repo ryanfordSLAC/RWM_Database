@@ -9,6 +9,13 @@ using System.Threading.Tasks;
 
 namespace RWM_Database.Backend.Attachments
 {
+    /* 
+    * Class description: MySQL backend attachments used by each item, container, shipment, and burial view
+    * 
+    * Author: James Meadows
+    * Intern at SLAC during summer of 2021
+    * For questions contact by email at: jamesmeadows18@outlook.com
+    */
     public class AttachmentHandler
     {
 

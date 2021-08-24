@@ -7,6 +7,14 @@ using System.Threading.Tasks;
 
 namespace RWM_Database
 {
+
+    /* 
+    * Class description: Backend MySQL for handling containers and their referenced items. In others words, items inside the container
+    * 
+    * Author: James Meadows
+    * Intern at SLAC during summer of 2021
+    * For questions contact by email at: jamesmeadows18@outlook.com
+    */
     public class PackedContainerHandler
     {
 
@@ -158,7 +166,7 @@ namespace RWM_Database
             }
             return count;
         }
-
+        //-1 means a null id. When the id is null search for any container or shipment
         private void LoadContainerList(int shipmentId, int optionalContainerId)
         {
 

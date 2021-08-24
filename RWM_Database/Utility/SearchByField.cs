@@ -9,6 +9,16 @@ using static RWM_Database.Pages.Forms.Shipment.ShipmentDashboardModel;
 
 namespace RWM_Database.Utility
 {
+
+
+    /* 
+    * Class description: Handles search functionality in use by the dashboard searching.
+    * 
+    * Author: James Meadows
+    * Intern at SLAC during summer of 2021
+    * For questions contact by email at: jamesmeadows18@outlook.com
+    */
+
     public class SearchByField
     {
         public Dictionary<string, string> searchMap;
@@ -18,6 +28,11 @@ namespace RWM_Database.Utility
         {
             searchMap = new Dictionary<string, string>();
         }
+
+
+         /* 
+        * Add a search field condition to be queried by the database
+        */
 
         public void AddSearch(string field, string data)
         {
@@ -38,6 +53,11 @@ namespace RWM_Database.Utility
             searchMap.TryGetValue(field, out string value);
             return value;
         }
+
+
+         /* 
+        * Returns the search fields as parameters in the URL 
+        */
 
         public string GetURLSearch()
         {

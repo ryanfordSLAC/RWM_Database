@@ -10,6 +10,13 @@ using static RWM_Database.Backend.Attachments.AttachmentHandler;
 
 namespace RWM_Database.Backend
 {
+        /* 
+    * Class description: Backend MySQL for the burial table
+    * 
+    * Author: James Meadows
+    * Intern at SLAC during summer of 2021
+    * For questions contact by email at: jamesmeadows18@outlook.com
+    */
     public class BurialHandler
     {
 
@@ -110,7 +117,7 @@ namespace RWM_Database.Backend
                 Console.WriteLine(ex.Message.ToString());
             }
         }
-
+        //loads a burial from a given burial_id. attachments is an empty list that will populate with attachments loaded here
         public static BurialData LoadBurial(int burialId, List<AttachmentData> attachments)
         {
             BurialData data = null;

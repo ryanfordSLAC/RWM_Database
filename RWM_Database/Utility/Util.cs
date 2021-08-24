@@ -10,6 +10,14 @@ namespace RWM_Database.Utility
     public class Util
     {
 
+    /* 
+    * Class description: Utility functions
+    * 
+    * Author: James Meadows
+    * Intern at SLAC during summer of 2021
+    * For questions contact by email at: jamesmeadows18@outlook.com
+    */
+
         public static string GetCurrentDate()
         {
             return DateTime.Now.ToString("yyyy-MM-dd");
@@ -19,6 +27,11 @@ namespace RWM_Database.Utility
         {
             return CultureInfo.CurrentCulture.TextInfo.ToTitleCase(title.ToLower());
         }
+
+
+       /* 
+       * converts to cubic feet, (12 * 12 * 12)
+       */
 
         public static float GetVolumeConversion()
         {

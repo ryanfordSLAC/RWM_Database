@@ -14,9 +14,11 @@ namespace RWM_Database.Pages.Forms
 {
 
     /* 
-    * Class to add Waste Declaration Items
-    * to the database
+    * Class description: Dashboard for Item Declarations
+    * 
     * Author: James Meadows
+    * Intern at SLAC during summer of 2021
+    * For questions contact by email at: jamesmeadows18@outlook.com
     */
 
     public class WasteDeclarationFormModel : PageModel
@@ -26,13 +28,15 @@ namespace RWM_Database.Pages.Forms
 
         public PaginatedTable PaginatedTable { get; set; }
 
+        //Search dashboard table by item declaration number
         [BindProperty(Name = "SearchDeclaration", SupportsGet = true)]
         public string SearchDeclaration { get; set; }
 
+        //Search dashboard table by item referenced container
         [BindProperty(Name = "SearchContainer", SupportsGet = true)]
         public string SearchContainer { get; set; }
 
-
+        //table pagination
         [BindProperty(Name = "CurrentPage", SupportsGet = true)]
         public int CurrentPage { get; set; }
 
@@ -53,13 +57,12 @@ namespace RWM_Database.Pages.Forms
 
         }
 
-        /*
-        
-        */
-
         public IActionResult OnPostSearchButton(IFormCollection data) {
             return RedirectToPage("WasteDeclarationForm", new { SearchDeclaration = data["SearchDeclaration"], SearchContainer = data["SearchContainer"] });
         }
+         /*
+        * Clears search fields
+        */
 
         public IActionResult OnPostClearButton(IFormCollection data)
         {

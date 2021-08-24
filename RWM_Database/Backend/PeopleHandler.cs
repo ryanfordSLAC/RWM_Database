@@ -6,6 +6,16 @@ using System.Threading.Tasks;
 
 namespace RWM_Database.Backend
 {
+
+
+         /* 
+    * Class description: Backend MySQL for people table
+    * 
+    * Author: James Meadows
+    * Intern at SLAC during summer of 2021
+    * For questions contact by email at: jamesmeadows18@outlook.com
+    */
+
     public class PeopleHandler
     {
 

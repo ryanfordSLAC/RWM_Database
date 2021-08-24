@@ -11,6 +11,15 @@ using static RWM_Database.Backend.ListTypeHandler;
 
 namespace RWM_Database.Pages.Forms.ListType
 {
+
+
+             /* 
+    * Class description: Not currently implemented in the program. Needs work.
+    * 
+    * Author: James Meadows
+    * Intern at SLAC during summer of 2021
+    * For questions contact by email at: jamesmeadows18@outlook.com
+    */
     public class EditRecordModel : PageModel
     {
         [BindProperty(Name = "ListName", SupportsGet = true)]

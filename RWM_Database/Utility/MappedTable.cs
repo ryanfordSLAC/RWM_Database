@@ -7,6 +7,16 @@ using System.Threading.Tasks;
 
 namespace RWM_Database.Utility
 {
+
+
+        /* 
+    * Class description: Used by the ListTypes to load the column names and types
+    * 
+    * Author: James Meadows
+    * Intern at SLAC during summer of 2021
+    * For questions contact by email at: jamesmeadows18@outlook.com
+    */
+
     public class MappedTable
     {
 
@@ -37,7 +47,7 @@ namespace RWM_Database.Utility
         private void ProcessTable()
         {
 
-
+            //excludes the first row because we dont want to show the id column to the user
             bool exclude = this.excludeFirst;
             foreach (DataRow row in table.Rows)
             {
@@ -57,6 +67,10 @@ namespace RWM_Database.Utility
                 map.TryAdd(column, data);
             }
         }
+
+        /* 
+        * Load the column names from a given table
+        */
 
         private DataTable LoadTable(string tableName)
         {

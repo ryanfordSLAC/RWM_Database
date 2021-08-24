@@ -11,11 +11,22 @@ using static RWM_Database.Backend.PeopleHandler;
 
 namespace RWM_Database.Pages.Forms
 {
+
+        /* 
+    * Class description: Create a new Item Declaration Form. Adds item to 'items' table in MySQL
+    * 
+    * Author: James Meadows
+    * Intern at SLAC during summer of 2021
+    * For questions contact by email at: jamesmeadows18@outlook.com
+    */
+
     public class CreateWasteFormModel : PageModel
     {
 
+        //List of containers to add the item to
         public PackedContainerHandler ContainerHandler { get; set; }
 
+        //convert people id to LastName FirstName
         public List<PeopleData> people;
 
         public void OnGet()

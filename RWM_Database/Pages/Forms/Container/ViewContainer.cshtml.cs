@@ -17,29 +17,37 @@ namespace RWM_Database.Pages.Forms
 {
 
     /* 
-    * Displays information about a container 
-    * to the user from a given container id
+    * Class description: Displays information about a container from a given container id
+    * 
     * Author: James Meadows
+    * Intern at SLAC during summer of 2021
+    * For questions contact by email at: jamesmeadows18@outlook.com
     */
 
     public class ViewContainerModel : PageModel
     {
+        //container id, references the MySQL container_id field
         [BindProperty(Name = "ContainerId", SupportsGet = true)]
         public int ContainerId{ get; set; }
 
+        //table pagination
         [BindProperty(Name = "CurrentPage", SupportsGet = true)]
         public int CurrentPage { get; set; }
 
         public ContainerData ContainerData { get; set; }
 
+        //list of items to potentially add one to the container
         public Dictionary<string, int> ItemMap;
 
         public Dictionary<int, string> attachmentTypes;
 
+        //for attaching a file to the container
         public IFormFile File { get; set; }
-
+        
+        //list of already attached files
         public List<AttachmentData> AttachmentList = new List<AttachmentData>();
 
+        //for displaying items already in the container
         public PackedContainerHandler PackedContainerHandler { get; set; }
 
         public PaginatedTable PaginatedTable { get; set; }
@@ -66,12 +74,14 @@ namespace RWM_Database.Pages.Forms
             return Page();
         }
 
+        //sets the item's referenced container to this container's id
         public IActionResult OnGetSubmitItem(int itemId, int containerId)
         {
             ItemHandler.UpdateItemContainer(itemId, containerId);
             return RedirectToPage("ViewContainer", new { ContainerId = containerId });
         }
 
+        //sets the item's referenced container to null id
         public IActionResult OnGetRemoveItem(int itemId, int containerId)
         {
             ItemHandler.UpdateItemContainer(itemId, -1);

@@ -10,6 +10,14 @@ using static RWM_Database.Backend.Attachments.AttachmentHandler;
 
 namespace RWM_Database.Backend
 {
+
+    /* 
+    * Class description: Backend MySQL for handling items table
+    * 
+    * Author: James Meadows
+    * Intern at SLAC during summer of 2021
+    * For questions contact by email at: jamesmeadows18@outlook.com
+    */
     public class ItemHandler
     {
         public List<WasteDeclarationData> ItemList { get; set; }
@@ -143,7 +151,7 @@ namespace RWM_Database.Backend
 
             return list;
         }
-
+        //search for items declared between two dates
         public static List<WasteDeclarationData> LoadItemsBetweenDates(string start, string end)
         {
             string baseCommand = "SELECT * FROM items LEFT JOIN container ON items.container_ref = container.container_id";
@@ -178,7 +186,7 @@ namespace RWM_Database.Backend
 
             return list;
         }
-
+        //loads an item from a given item_id. attachments is an empty list that will populate with attachments loaded here
         public static WasteDeclarationData LoadItemWithAttachments(int itemId, List<AttachmentData> attachments)
         {
             WasteDeclarationData form = null;

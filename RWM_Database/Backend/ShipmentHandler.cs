@@ -10,6 +10,15 @@ using static RWM_Database.Backend.Attachments.AttachmentHandler;
 
 namespace RWM_Database.Backend
 {
+
+     /* 
+    * Class description: Backend MySQL for shipment table
+    * 
+    * Author: James Meadows
+    * Intern at SLAC during summer of 2021
+    * For questions contact by email at: jamesmeadows18@outlook.com
+    */
+
     public class ShipmentHandler
     {
 
@@ -41,7 +50,7 @@ namespace RWM_Database.Backend
                 this.ShipmentMaxVolume = shipmentMaxVolume;
             }
         }
-
+        //Map of shipment_id , shipment_number
         public static Dictionary<string, int> GetAllShipmentsMap()
         {
             Dictionary<string, int> shipmentMap = new Dictionary<string, int>();
@@ -160,6 +169,7 @@ namespace RWM_Database.Backend
             }
         }
 
+        //loads a shipment from a given shipmentId. attachments is an empty list that will populate with attachments loaded here
         public static ShipmentData LoadShipment(int shipmentId, List<AttachmentData> attachments)
         {
             ShipmentData data = null;
@@ -170,7 +180,6 @@ namespace RWM_Database.Backend
 
                 command.CommandText = "SELECT * FROM shipment LEFT JOIN attachments ON shipment.shipment_id = attachments.item_reference LEFT JOIN attachment_type ON attachments.type = attachment_type.attachment_type_id LEFT JOIN shipment_type ON shipment.shipment_type_ref = shipment_type.shipment_type_id WHERE shipment_id = @ShipmentId";
                 command.Parameters.AddWithValue("@ShipmentId", shipmentId);
-                Console.WriteLine(command.CommandText);
                 MySqlDataReader read = command.ExecuteReader();
                 if (read.HasRows)
                 {
