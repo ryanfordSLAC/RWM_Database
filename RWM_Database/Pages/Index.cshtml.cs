@@ -91,7 +91,9 @@ namespace RWM_Database.Pages
             omit.Add("burial_id");
             omit.Add("disposal_site_ref");
             omit.Add("shipment_type_id");
-            ExportExcel.ExportTable(table, Directory.GetCurrentDirectory() + "/wwwroot/Export/RWM_Database" + ".xlsx", omit);
+            string folder = Directory.GetCurrentDirectory() + "/wwwroot/Export/";
+            System.IO.Directory.CreateDirectory(folder);
+            ExportExcel.ExportTable(table, folder + "RWM_Database" + ".xlsx", omit);
         }
 
     }
