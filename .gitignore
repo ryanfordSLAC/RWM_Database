@@ -9,6 +9,7 @@
 *.user
 *.userosscache
 *.sln.docstates
+*.xlsx
 
 # Server-specific files
 appsettings.json
